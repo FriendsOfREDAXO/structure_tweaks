@@ -166,6 +166,7 @@ class structure_tweaks_page extends structure_tweaks_base
         $type = $list->getValue("type");
 
         $text = [
+            '' => '---',
             'hide_startarticle' => self::msg('hide_startarticle'),
             'split_category' => self::msg('split_category'),
         ];
