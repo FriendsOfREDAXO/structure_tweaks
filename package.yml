@@ -1,0 +1,16 @@
+package: structure_tweaks
+version: '1.0.0-alpha'
+author: Friends of Redaxo
+supportpage: https://github.com/FriendsOfREDAXO
+
+requires:
+    redaxo: '^5.2.0'
+    packages:
+        structure: '^2.2.0'
+
+page:
+    title: translate:structure_tweaks
+    perm: admin
+    subpages:
+        settings: { title: translate:page_settings }
+        info: { title: translate:page_info }

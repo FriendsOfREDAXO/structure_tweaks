@@ -1,0 +1,22 @@
+structure_tweaks = Structure Tweaks
+
+structure_tweaks_page_settings = Einstellungen
+structure_tweaks_page_info = Info
+structure_tweaks_description = Möglichkeiten zur Manipulation der Strukturausgabe..
+structure_tweaks_deleted = Verweis wurde gelöscht.
+structure_tweaks_list_rowmsg = Keine Verweise vorhanden
+structure_tweaks_list_table_attr = Auflistung aller Verweise
+structure_tweaks_article_id = Artikel-ID
+structure_tweaks_article_name = Artikel-Name
+structure_tweaks_functions = Funktionen
+structure_tweaks_edit = bearbeiten
+structure_tweaks_delete = löschen
+structure_tweaks_article_linkmap = Artikel
+structure_tweaks_article_exists = Ein Verweis mit dieser ID existiert bereits!
+structure_tweaks_select = Startartikel
+structure_tweaks_article_not_found = Artikel nicht gefunden!
+structure_tweaks_type = Typ
+structure_tweaks_hide_startarticle = Startartikel ausblenden
+structure_tweaks_split_category = Trenner vor Kategorie
+
+
