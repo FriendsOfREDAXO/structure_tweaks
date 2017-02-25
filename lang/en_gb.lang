@@ -1,0 +1,22 @@
+structure_tweaks = Structure Tweaks
+
+structure_tweaks_page_settings = Settings
+structure_tweaks_page_info = Info
+structure_tweaks_description = Allows manipulation of the structure output
+structure_tweaks_deleted = Reference has been deleted.
+structure_tweaks_list_rowmsg = No references found
+structure_tweaks_list_table_attr = List of all references
+structure_tweaks_article_id = Article ID
+structure_tweaks_article_name = Article name
+structure_tweaks_functions = Functions
+structure_tweaks_edit = edit
+structure_tweaks_delete = delete
+structure_tweaks_article_linkmap = Article
+structure_tweaks_article_exists = A reference with this ID already exists!
+structure_tweaks_select = Start article
+structure_tweaks_article_not_found = Article not found!
+structure_tweaks_type = Type
+structure_tweaks_hide_startarticle = Hide start article
+structure_tweaks_split_category = Category separator
+
+
