@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Daniel Weitenauer
+ * @author Rexdude, Friends of REDAXO
  */
 
 class structure_tweaks_hide_startarticle extends structure_tweaks_base

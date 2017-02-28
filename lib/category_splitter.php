@@ -1,6 +1,6 @@
 <?php
 /**
- * @author Daniel Weitenauer, Rexdude
+ * @author Rexdude, Friends of REDAXO
  */
 
 class structure_tweaks_category_splitter extends structure_tweaks_base
@@ -10,12 +10,14 @@ class structure_tweaks_category_splitter extends structure_tweaks_base
      */
     public static function splitCategories()
     {
-        $categories = self::getSplitterCategories();
+        if (rex_request('page', 'string') == 'structure') {
+            $categories = self::getSplitterCategories();
 
-        if (count($categories) > 0 && rex_request('page', 'string') == 'structure' && rex_request('category_id', 'int') == 0) {
-            rex_extension::register('OUTPUT_FILTER', [__CLASS__, 'ep'], rex_extension::NORMAL, [
-                'categories' => $categories,
-            ]);
+            if (count($categories) > 0 && rex_request('page', 'string') == 'structure' && rex_request('category_id', 'int') == 0) {
+                rex_extension::register('OUTPUT_FILTER', [__CLASS__, 'ep'], rex_extension::NORMAL, [
+                    'categories' => $categories,
+                ]);
+            }
         }
     }
 
