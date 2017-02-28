@@ -8,15 +8,15 @@ class structure_tweaks_base
     /**
      * @return string
      */
-    protected static function getName()
+    protected static function name()
     {
-        return self::getAddon()->getName();
+        return self::addon()->getName();
     }
 
     /**
      * @return rex_addon
      */
-    protected static function getAddon()
+    protected static function addon()
     {
         return rex_addon::get('structure_tweaks');
     }
@@ -27,7 +27,7 @@ class structure_tweaks_base
      */
     protected static function msg($string)
     {
-        return \rex_i18n::msg(self::getName().'_'.$string);
+        return \rex_i18n::msg(self::name().'_'.$string);
     }
 
     /**
@@ -38,7 +38,7 @@ class structure_tweaks_base
     {
         $sql = rex_sql::factory();
         #$sql->setDebug(true);
-        $hidden_articles = $sql->getArray('SELECT `article_id` FROM '.rex::getTable(self::getName()).' WHERE `type` = ?', [ $type ]);
+        $hidden_articles = $sql->getArray('SELECT `article_id` FROM '.rex::getTable(self::name()).' WHERE `type` = ?', [ $type ]);
 
         $return = [];
         foreach ($hidden_articles as $article) {

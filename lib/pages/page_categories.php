@@ -1,6 +1,6 @@
 <?php
 
-class structure_tweaks_page extends structure_tweaks_base
+class structure_tweaks_page_categories extends structure_tweaks_base
 {
     /**
      * @return string
@@ -33,7 +33,7 @@ class structure_tweaks_page extends structure_tweaks_base
     {
         $sql = rex_sql::factory();
         #$sql->setDebug(true);
-        $sql->setTable(rex::getTable(self::getName()));
+        $sql->setTable(rex::getTable(self::name()));
         $sql->setWhere('id='.self::getArticleId().' LIMIT 1');
 
         if ($sql->delete()) {
@@ -50,7 +50,7 @@ class structure_tweaks_page extends structure_tweaks_base
      */
     protected static function getTable()
     {
-        $list = rex_list::factory('SELECT * FROM '.rex::getTable(self::getName()).' ORDER BY id');
+        $list = rex_list::factory('SELECT * FROM '.rex::getTable(self::name()).' ORDER BY id');
 
         $head = '<a href="'.$list->getUrl(['func' => 'add']).'"><i class="rex-icon rex-icon-add"></i></a>';
         $body = '<a href="'.$list->getUrl(['func' => 'edit']).'"><i class="rex-icon rex-icon-table"></i></a>';
@@ -96,7 +96,7 @@ class structure_tweaks_page extends structure_tweaks_base
     {
         $article_id = self::getArticleId();
 
-        $form = rex_form::factory(rex::getTable(self::getName()), self::msg('select'), 'id='.$article_id);
+        $form = rex_form::factory(rex::getTable(self::name()), self::msg('select'), 'id='.$article_id);
 
         if (self::getFunc() == 'edit') {
             $form->addParam('article_id', $article_id);

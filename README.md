@@ -13,6 +13,15 @@ Die Artikel werden über CSS ausgeblendet. Evtl. vorhandene Inhalte bleiben also
 
 Es können Kategorien bestimmt werden, vor denen ein breiter Trenner erscheinen soll.  
 
+### 3. Artikel-Metadaten in der Seitenspalte anzeigen
+
+Die Artikel-Metainfos des Metainfo-Addons können optional statt in einem Tab in der Seitenspalte angezeigt werden. Dort werden sie mit den Metadaten der strukturansicht kombiniert. 
+Außerdem kann die Anzeige des Artikelstatus zum On- und Offlineschalten des Artikels genutzt werden. 
+
+### Credits
+
+Rexdude, Ingo Winter, Daniel Weitenauer
+
 
 
 
