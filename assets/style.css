@@ -1,0 +1,18 @@
+/* Hide meta data info panel */
+.rex-main-sidebar > section:first-child {
+    display: none;
+}
+
+.moved-metainfo .rex-form-group:not(.rex-form-group-vertical) > dt,
+.moved-metainfo .rex-form-group:not(.rex-form-group-vertical) > dd,
+.moved-metainfo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child,
+.moved-metainfo .dl-horizontal > dt,
+.moved-metainfo .dl-horizontal > dd,
+.moved-metainfo .dl-horizontal > dd:first-child {
+    margin: 0;
+    padding: 0;
+    float: none;
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important;
+}
