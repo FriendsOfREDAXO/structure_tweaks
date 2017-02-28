@@ -13,4 +13,5 @@ page:
     perm: admin
     subpages:
         settings: { title: translate:page_settings }
+        categories: { title: translate:page_categories }
         info: { title: translate:page_info }
