@@ -11,7 +11,7 @@ class structure_tweaks_category_splitter extends structure_tweaks_base
     public static function init()
     {
         rex_extension::register('PACKAGES_INCLUDED', function () {
-            if (rex_addon::get('structure')->isAvailable() && rex_request('page', 'string') == 'structure') {
+            if (rex_addon::get('structure')->isAvailable() && rex_request('page', 'string') == 'structure' && rex_request('category_id', 'int') == 0) {
                 $categories = self::getSplitterCategories();
 
                 if (count($categories)) {
