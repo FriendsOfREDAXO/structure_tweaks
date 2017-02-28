@@ -12,6 +12,6 @@ page:
     title: translate:structure_tweaks
     perm: admin
     subpages:
-        settings: { title: translate:page_settings }
         categories: { title: translate:page_categories }
+        settings: { title: translate:page_settings }
         info: { title: translate:page_info }
