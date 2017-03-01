@@ -73,6 +73,9 @@ class structure_tweaks_page_categories extends structure_tweaks_base
         $list->setColumnFormat('type', 'custom', __CLASS__.'::getType');
         $list->setColumnLabel('type', self::msg('type'));
 
+        // Label
+        $list->setColumnLabel('label', self::msg('splitter_label'));
+
         // Functions
         $list->addColumn(self::msg('functions'), self::msg('edit'), -1, [
             '<th colspan="2">###VALUE###</th>',
@@ -113,6 +116,18 @@ class structure_tweaks_page_categories extends structure_tweaks_base
         $select->addOption('---', '');
         $select->addOption(self::msg('hide_startarticle'), 'hide_startarticle');
         $select->addOption(self::msg('split_category'), 'split_category');
+
+        $field = $form->addTextField('label');
+        $field->setLabel(self::msg('splitter_label'));
+
+        $form->addRawField('
+            <script>
+                $(function() { 
+                    var structureTweaks_pageCategories = new structureTweaks();
+                    structureTweaks_pageCategories.pageCategories();
+                });
+            </script>
+        ');
 
         return $form->get();
     }

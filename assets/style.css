@@ -25,3 +25,15 @@
     display: none !important;
 }
 
+/**
+ * Category splitter
+ */
+.structure-tweaks-splitter,
+.structure-tweaks-splitter:focus,
+.structure-tweaks-splitter:active,
+.structure-tweaks-splitter:hover {
+    color: #324050;
+    font-weight: bold;
+    background-color: #F3F6FB !important;
+    border-color: #F3F6FB !important;;
+}

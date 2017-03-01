@@ -12,7 +12,7 @@ structure_tweaks_article_name = Article name
 structure_tweaks_functions = Functions
 structure_tweaks_edit = edit
 structure_tweaks_delete = delete
-structure_tweaks_article_linkmap = Article
+structure_tweaks_article_linkmap = Kategorie
 structure_tweaks_article_exists = A reference with this ID already exists!
 structure_tweaks_select = Start article
 structure_tweaks_article_not_found = Article not found!
@@ -24,4 +24,4 @@ structure_tweaks_save = save
 structure_tweaks_saved = Settings saved
 structure_tweaks_metadata = Metadata
 structure_tweaks_metainfo_fields = Meta Info
-
+structure_tweaks_splitter_label = Label

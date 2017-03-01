@@ -15,7 +15,7 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
             $page =  rex_request::request('page', 'string');
 
             if (rex_addon::get('structure')->isAvailable() && in_array($page, $pages)) {
-                rex_extension::register('PAGE_HEADER', [__CLASS__, 'ep'], rex_extension::NORMAL);
+                rex_extension::register('PAGE_HEADER', [__CLASS__, 'ep']);
             }
         });
     }

@@ -38,11 +38,16 @@ class structure_tweaks_base
     {
         $sql = rex_sql::factory();
         #$sql->setDebug(true);
-        $hidden_articles = $sql->getArray('SELECT `article_id` FROM '.rex::getTable(self::name()).' WHERE `type` = ?', [ $type ]);
+        $articles = $sql->getArray('SELECT * FROM '.rex::getTable(self::name()).' WHERE `type` = ?', [ $type ]);
 
         $return = [];
-        foreach ($hidden_articles as $article) {
-            $return[] = $article['article_id'];
+        foreach ($articles as $article) {
+            $item['article_id'] = $article['article_id'];
+            if ($type == 'split_category') {
+                $item['label'] = $article['label'];
+            }
+
+            $return[] = $item;
         }
 
         return $return;

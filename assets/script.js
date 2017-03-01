@@ -6,6 +6,10 @@ var structureTweaks = function() {
      * @type {Array}
      */
     this.hiddenArticles = [];
+    /**
+     * @type {Array}
+     */
+    this.splitterCategories = [];
 
     /**
      * @see Addon quick_navigation
@@ -36,6 +40,16 @@ var structureTweaks = function() {
     };
 
     /**
+     * @param categories
+     * @returns {structureTweaks}
+     */
+    this.setSplitterCategories = function(categories) {
+        this.splitterCategories = JSON.parse(categories);
+
+        return this;
+    };
+
+    /**
      * Hide articles
      * @returns {structureTweaks}
      */
@@ -51,5 +65,57 @@ var structureTweaks = function() {
         }
 
         return this;
-    }
+    };
+
+    /**
+     * Split categories
+     * @returns {structureTweaks}
+     */
+    this.splitCategories = function() {
+        var clangId = this.getUrlVars('clang');
+        if (clangId === undefined) {
+            clangId = 1;
+        }
+
+        for (var i = 0; i < this.splitterCategories.length; i++) {
+            var search = 'index.php?page=structure&category_id=' + this.splitterCategories[i]['article_id'] + '&article_id=0&clang=' + clangId;
+            var $categoryRow = $('a[href="' + search + '"]');
+            var label = this.splitterCategories[i]['label'];
+            if (!label) {
+                label = '&nbsp;';
+            }
+            // Insert splitter
+            $categoryRow
+                .parents('tr').before('<tr class="structure-tweaks-splitter"><td colspan="2"></td><td>' + label + '</td><td colspan="4"></td></tr>')
+                .parents('.panel').addClass('structure-tweaks-splitted');
+        }
+
+        return this;
+    };
+
+    /**
+     * @returns {structureTweaks}
+     */
+    this.pageCategories = function() {
+        var value = jQuery('#rex-structure-tweaks-startartikel-type option:selected').val();
+        if (value === undefined) {
+            value = "";
+        }
+
+        if (value != 'split_category') {
+            jQuery("#rex-structure-tweaks-startartikel-label").parents('dl').slideUp(100);
+        }
+
+        jQuery('#rex-structure-tweaks-startartikel-type').change(function() {
+            var value = jQuery(this).find('option:selected').val();
+
+            if (value == 'split_category') {
+                jQuery("#rex-structure-tweaks-startartikel-label").parents('dl').slideDown(100);
+            } else {
+                jQuery("#rex-structure-tweaks-startartikel-label").parents('dl').slideUp(100);
+            }
+        });
+
+        return this;
+    };
 };
