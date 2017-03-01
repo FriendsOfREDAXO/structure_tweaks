@@ -1,8 +1,9 @@
-/* Hide meta data info panel */
+/**
+ * Move metainfo
+ */
 .rex-main-sidebar > section:first-child {
     display: none;
 }
-
 .moved-metainfo .rex-form-group:not(.rex-form-group-vertical) > dt,
 .moved-metainfo .rex-form-group:not(.rex-form-group-vertical) > dd,
 .moved-metainfo .rex-form-group:not(.rex-form-group-vertical) > dd:first-child,
@@ -16,3 +17,11 @@
     width: 100% !important;
     text-align: left !important;
 }
+
+/**
+ * Hide Startarticle
+ */
+.rex-startarticle.is-hidden {
+    display: none !important;
+}
+

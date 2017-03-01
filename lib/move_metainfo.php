@@ -12,8 +12,6 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
     {
         rex_extension::register('PACKAGES_INCLUDED', function () {
             if (rex_addon::get('metainfo')->isAvailable()) {
-                rex_view::addCssFile(self::addon()->getAssetsUrl('style.css') );
-
                 // Remove meta info tab
                 rex_addon::get('metainfo')->removeProperty('pages');
 

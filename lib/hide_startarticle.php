@@ -15,14 +15,7 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
             $page =  rex_request::request('page', 'string');
 
             if (rex_addon::get('structure')->isAvailable() && in_array($page, $pages)) {
-                $hidden_articles = self::getHiddenArticles();
-                $category_id = rex_request::request('category_id', 'int');
-
-                if (in_array($category_id, $hidden_articles)) {
-                    rex_extension::register('PAGE_HEADER', [__CLASS__, 'ep'], rex_extension::NORMAL, [
-                        'page' => $page,
-                    ]);
-                }
+                rex_extension::register('PAGE_HEADER', [__CLASS__, 'ep'], rex_extension::NORMAL);
             }
         });
     }
@@ -42,23 +35,20 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
      */
     public static function ep(rex_extension_point $ep)
     {
-        $subject  = $ep->getSubject();
+        $subject = $ep->getSubject();
 
+        // Pass hidden articles to JavaScript
         $subject .= '
-            <style type="text/css"> 
-                .rex-startarticle { display: none !important; } 
-            </style>
-        ';
-        // Add missing article class in linkmap
-        if ($ep->getParam('page') == 'linkmap') {
-            $subject .= '
-                <script type="text/javascript">
-                    jQuery(document).ready(function() {
-                        jQuery(".rex-icon-startarticle").parents("li").addClass("rex-startarticle");
+            <script>
+                $(function() {
+                    var structureTweaks_hideArticles = new structureTweaks();
+                    structureTweaks_hideArticles.setHiddenArticles(\''.json_encode(self::getHiddenArticles()).'\').hideArticles();
+                    $(document).on("pjax:end", function() {
+                        structureTweaks_hideArticles.hideArticles();
                     });
-                </script>
-            ';
-        }
+                });
+            </script>
+        ';
 
         return $subject;
     }
