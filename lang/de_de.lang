@@ -1,7 +1,7 @@
 structure_tweaks = Structure Tweaks
 
 structure_tweaks_page_settings = Einstellungen
-structure_tweaks_page_categories = Artikel
+structure_tweaks_page_categories = Kategorien
 structure_tweaks_page_info = Info
 structure_tweaks_description = Möglichkeiten zur Manipulation der Strukturausgabe..
 structure_tweaks_deleted = Verweis wurde gelöscht.
@@ -24,5 +24,3 @@ structure_tweaks_save = Speichern
 structure_tweaks_saved = Einstellungen gespeichert
 structure_tweaks_metadata = Metadaten
 structure_tweaks_metainfo_fields = Metainfos
-
-

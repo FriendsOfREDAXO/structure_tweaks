@@ -1,6 +1,7 @@
 structure_tweaks = Structure Tweaks
 
 structure_tweaks_page_settings = Settings
+structure_tweaks_page_categories = Categories
 structure_tweaks_page_info = Info
 structure_tweaks_description = Allows manipulation of the structure output
 structure_tweaks_deleted = Reference has been deleted.
@@ -18,5 +19,9 @@ structure_tweaks_article_not_found = Article not found!
 structure_tweaks_type = Type
 structure_tweaks_hide_startarticle = Hide start article
 structure_tweaks_split_category = Category separator
-
+structure_tweaks_move_meta_info_page = Show article metadata in sidebar
+structure_tweaks_save = save
+structure_tweaks_saved = Settings saved
+structure_tweaks_metadata = Metadata
+structure_tweaks_metainfo_fields = Meta Info
 
