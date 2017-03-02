@@ -2,7 +2,7 @@
 
 ### 1. Artikel ausblenden
 
-Da bei Redaxo Artikel-Kategorien durch besonders konfigurierte Artikel erzeugt werden, sind diese Artikel stets in der Kategorienansicht sichtbar. 
+Da bei REDAXO Artikel-Kategorien durch besonders konfigurierte Artikel erzeugt werden, sind diese Artikel stets in der Kategorienansicht sichtbar. 
 Solange dieser Artikel für Inhalte genutzt wird, fällt das nicht weiter auf.
 Falls man jedoch Kategorien ähnlich wie Dateiordner als reine Datensilos nutzen möchte, kann dieser zusätzliche Artikel die Übersicht stören.
 
