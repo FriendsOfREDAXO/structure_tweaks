@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `%TABLE_PREFIX%structure_tweaks`;
