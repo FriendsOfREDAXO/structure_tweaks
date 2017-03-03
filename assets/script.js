@@ -76,18 +76,25 @@ var structureTweaks = function() {
         if (clangId === undefined) {
             clangId = 1;
         }
+        var articleId = this.getUrlVars('article_id');
+        if (articleId === undefined) {
+            articleId = 0;
+        }
 
         for (var i = 0; i < this.splitterCategories.length; i++) {
-            var search = 'index.php?page=structure&category_id=' + this.splitterCategories[i]['article_id'] + '&article_id=0&clang=' + clangId;
+            var search = 'index.php?page=structure&category_id=' + this.splitterCategories[i]['article_id'] + '&article_id=' + articleId + '&clang=' + clangId;
             var $categoryRow = $('a[href="' + search + '"]');
             var label = this.splitterCategories[i]['label'];
             if (!label) {
                 label = '&nbsp;';
             }
+
             // Insert splitter
-            $categoryRow
-                .parents('tr').before('<tr class="structure-tweaks-splitter"><td colspan="2"></td><td>' + label + '</td><td colspan="4"></td></tr>')
-                .parents('.panel').addClass('structure-tweaks-splitted');
+            if ($categoryRow.length) {
+                $categoryRow
+                    .parents('tr').before('<tr class="structure-tweaks-splitter"><td colspan="2"></td><td>' + label + '</td><td colspan="4"></td></tr>')
+                    .parents('.panel').addClass('structure-tweaks-splitted');
+            }
         }
 
         return this;
