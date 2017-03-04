@@ -26,6 +26,13 @@
 }
 
 /**
+ * Hide category status
+ */
+.structure-tweaks-hidden a {
+    display: none !important;
+}
+
+/**
  * Category splitter
  */
 .structure-tweaks-splitter,

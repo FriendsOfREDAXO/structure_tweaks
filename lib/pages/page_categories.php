@@ -115,6 +115,7 @@ class structure_tweaks_page_categories extends structure_tweaks_base
         $select->setSize(1);
         $select->addOption('---', '');
         $select->addOption(self::msg('hide_startarticle'), 'hide_startarticle');
+        $select->addOption(self::msg('hide_category_functions'), 'hide_cat_functions');
         $select->addOption(self::msg('split_category'), 'split_category');
 
         $field = $form->addTextField('label');
@@ -183,6 +184,7 @@ class structure_tweaks_page_categories extends structure_tweaks_base
         $text = [
             '' => '---',
             'hide_startarticle' => self::msg('hide_startarticle'),
+            'hide_cat_functions' => self::msg('hide_category_functions'),
             'split_category' => self::msg('split_category'),
         ];
 

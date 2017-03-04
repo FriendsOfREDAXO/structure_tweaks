@@ -6,6 +6,10 @@ var structureTweaks = function() {
      * @type {Array}
      */
     this.hiddenArticles = [];
+   /**
+     * @type {Array}
+     */
+    this.hiddenCategories = [];
     /**
      * @type {Array}
      */
@@ -40,6 +44,16 @@ var structureTweaks = function() {
     };
 
     /**
+     * @param articles
+     * @returns {structureTweaks}
+     */
+    this.setHiddenCategories = function(articles) {
+        this.hiddenCategories = JSON.parse(articles);
+
+        return this;
+    };
+
+    /**
      * @param categories
      * @returns {structureTweaks}
      */
@@ -62,6 +76,48 @@ var structureTweaks = function() {
 
         if (categoryId && this.hiddenArticles.indexOf(categoryId) > -1) {
             jQuery(".rex-startarticle").addClass("is-hidden");
+        }
+
+        return this;
+    };
+
+    /**
+     * Split categories
+     * @returns {structureTweaks}
+     */
+    this.hideCategoryFunctions = function() {
+        var clangId = this.getUrlVars('clang');
+        if (clangId === undefined) {
+            clangId = 1;
+        }
+
+        var articleId = this.getUrlVars('article_id');
+        if (articleId === undefined) {
+            articleId = 0;
+        }
+
+        var categoryId = this.getUrlVars('category_id');
+        if (categoryId === undefined) {
+            categoryId = 0;
+        }
+
+        var catStart = this.getUrlVars('catstart');
+        if (catStart === undefined) {
+            catStart = 0;
+        }
+
+        for (var i = 0; i < this.hiddenCategories.length; i++) {
+            var searchStart = 'index.php?page=structure&category_id=' + categoryId + '&article_id=' + articleId + '&clang=' + clangId + '&category-id=' + this.hiddenCategories[i] + '&';
+            var searchEnd   = '&catstart=' + catStart;
+            var $categoryDelete = $('a[href="' + searchStart + 'rex-api-call=category_delete' + searchEnd + '"]');
+            var $categoryStatus = $('a[href="' + searchStart + 'rex-api-call=category_status' + searchEnd + '"]');
+
+            if ($categoryDelete.length) {
+                $categoryDelete.parents('td').addClass('structure-tweaks-hidden').append('-');
+            }
+            if ($categoryStatus.length) {
+                $categoryStatus.parents('td').addClass('structure-tweaks-hidden').append('-');
+            }
         }
 
         return this;

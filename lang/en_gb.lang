@@ -18,6 +18,7 @@ structure_tweaks_select = Start article
 structure_tweaks_article_not_found = Article not found!
 structure_tweaks_type = Type
 structure_tweaks_hide_startarticle = Hide start article
+structure_tweaks_hide_category_functions = Hide category functions
 structure_tweaks_split_category = Category separator
 structure_tweaks_move_meta_info_page = Show article metadata in sidebar
 structure_tweaks_save = save

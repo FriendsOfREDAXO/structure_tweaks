@@ -17,6 +17,9 @@ if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
     // Hide startarticles
     structure_tweaks_hide_startarticle::init();
 
+    // Hide category functions
+    structure_tweaks_hide_category_functions::init();
+
     // Split categories
     structure_tweaks_category_splitter::init();
 
