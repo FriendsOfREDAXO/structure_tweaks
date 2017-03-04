@@ -37,17 +37,11 @@ class structure_tweaks_base
     protected static function getArticles($type)
     {
         $sql = rex_sql::factory();
-        #$sql->setDebug(true);
         $articles = $sql->getArray('SELECT * FROM '.rex::getTable(self::name()).' WHERE `type` = ?', [ $type ]);
 
         $return = [];
         foreach ($articles as $article) {
-            $item['article_id'] = $article['article_id'];
-            if ($type == 'split_category') {
-                $item['label'] = $article['label'];
-            }
-
-            $return[] = $item;
+            $return[] = $article['article_id'];
         }
 
         return $return;

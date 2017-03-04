@@ -25,15 +25,7 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
      */
     protected static function getHiddenArticles()
     {
-        $sql = rex_sql::factory();
-        $articles = $sql->getArray('SELECT `article_id` FROM '.rex::getTable(self::name()).' WHERE `type` = "hide_startarticle"');
-
-        $return = [];
-        foreach ($articles as $article) {
-            $return[] = $article['article_id'];
-        }
-
-        return $return;
+        return self::getArticles('hide_startarticle');
     }
 
     /**

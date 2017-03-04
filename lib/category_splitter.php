@@ -22,7 +22,20 @@ class structure_tweaks_category_splitter extends structure_tweaks_base
      */
     public static function getSplitterCategories()
     {
-        return self::getArticles('split_category');
+        $sql = rex_sql::factory();
+        $articles = $sql->getArray('SELECT * FROM '.rex::getTable(self::name()).' WHERE `type` = "split_category"');
+
+        $return = [];
+        foreach ($articles as $article) {
+            $item = [
+                'article_id' => $article['article_id'],
+                'label' => $article['label'],
+            ];
+
+            $return[] = $item;
+        }
+
+        return $return;
     }
 
     /**
