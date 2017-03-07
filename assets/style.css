@@ -28,8 +28,8 @@
 /**
  * Hide category status
  */
-/*.structure-tweaks-container .structure-tweaks-meta,*/
-/*.structure-tweaks-container .structure-tweaks-delete,*/
+/*.structure-tweaks-container .structure-tweaks-meta a,*/
+/*.structure-tweaks-container .structure-tweaks-delete a,*/
 .structure-tweaks-container .structure-tweaks-status a {
     display: none !important;
 }
