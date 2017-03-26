@@ -15,6 +15,11 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
                 // Remove meta info tab
                 rex_addon::get('metainfo')->removeProperty('pages');
 
+                // Metainfo js
+                if (rex_be_controller::getCurrentPagePart(1) == 'content') {
+                    rex_view::addJsFile(rex_url::addonAssets('metainfo', 'metainfo.js'));
+                }
+
                 // Redirect meta info into sidebar
                 rex_extension::register('STRUCTURE_CONTENT_SIDEBAR', [__CLASS__, 'getMetaPage']);
             }
