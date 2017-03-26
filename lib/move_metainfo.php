@@ -15,6 +15,11 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
                 // Remove meta info tab
                 rex_addon::get('metainfo')->removeProperty('pages');
 
+                // Metainfo js
+                if (rex_be_controller::getCurrentPagePart(1) == 'content') {
+                    rex_view::addJsFile(rex_url::addonAssets('metainfo', 'metainfo.js'));
+                }
+
                 // Redirect meta info into sidebar
                 rex_extension::register('STRUCTURE_CONTENT_SIDEBAR', [__CLASS__, 'getMetaPage']);
             }
@@ -165,6 +170,7 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
     {
         $article = rex_article::get($article_id, $clang_id);
         $artstart = rex_request('artstart', 'int');
+        $catstart = rex_request('catstart', 'int');
 
         $perm = rex::getUser()->getComplexPerm('structure')->hasCategoryPerm($article_id);
 
@@ -175,15 +181,23 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
             'clang' => $clang_id,
         ]);
 
-
         $article_status_types = rex_article_service::statusTypes();
         $article_status = $article_status_types[$article->getValue('status')][0];
         $article_class = $article_status_types[$article->getValue('status')][1];
         $article_icon = $article_status_types[$article->getValue('status')][2];
-        $article_link = $context->getUrl([
-            'rex-api-call' => 'article_status',
-            'artstart' => $artstart
-        ]);
+
+        if ($article->isStartArticle()) {
+            $article_link = $context->getUrl([
+                'rex-api-call' => 'category_status',
+                'catstart' => $catstart,
+                'category-id' => $article->getCategoryId(),
+            ]);
+        } else {
+            $article_link = $context->getUrl([
+                'rex-api-call' => 'article_status',
+                'artstart' => $artstart
+            ]);
+        }
 
         if ($perm && rex::getUser()->hasPerm('publishArticle[]')) {
             $return = '<a class="'.$article_class.'" href="'.$article_link.'"><i class="rex-icon '.$article_icon.'"></i> '.$article_status.'</a>';
