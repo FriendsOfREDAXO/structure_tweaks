@@ -9,7 +9,7 @@ if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
         rex_view::addJsFile($this->getAssetsUrl('script.js'));
 
         // Tweak redaxo skin to keep structure table aligned
-        if (rex_plugin::get('be_style', 'redaxo')->isAvailable()) {
+        if (rex_plugin::get('be_style', 'redaxo')->isAvailable() && file_exists($this->getAssetsPath('style-redaxo.cs'))) {
             rex_view::addCssFile($this->getAssetsUrl('style-redaxo.css'));
         }
     }
