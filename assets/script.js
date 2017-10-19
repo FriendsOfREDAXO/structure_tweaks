@@ -10,6 +10,10 @@ var structureTweaks = function() {
      * @type {Array}
      */
     this.hiddenCategories = [];
+   /**
+     * @type {Array}
+     */
+    this.hiddenCategoryRows = [];
     /**
      * @type {Array}
      */
@@ -54,6 +58,16 @@ var structureTweaks = function() {
     };
 
     /**
+     * @param articles
+     * @returns {structureTweaks}
+     */
+    this.setHiddenCategoryRows = function(articles) {
+        this.hiddenCategoryRows = JSON.parse(articles);
+
+        return this;
+    };
+
+    /**
      * @param categories
      * @returns {structureTweaks}
      */
@@ -82,7 +96,7 @@ var structureTweaks = function() {
     };
 
     /**
-     * Split categories
+     * Hide category functions
      * @returns {structureTweaks}
      */
     this.hideCategoryFunctions = function() {
@@ -125,6 +139,22 @@ var structureTweaks = function() {
                 $categoryMeta.parents('td').addClass('structure-tweaks-meta').parents('tr').addClass('structure-tweaks-container');
             }
         }
+
+        return this;
+    };
+
+    /**
+     * Hide categories
+     * @returns {structureTweaks}
+     */
+    this.hideCategories = function() {
+        var that = this;
+        jQuery(".rex-page-section").first().find(".rex-table-id").each(function() {
+            var categoryId = $(this).html();
+            if (that.hiddenCategoryRows.indexOf(categoryId) >= 0) {
+                $(this).parents('tr').addClass('structure-tweaks-category is-hidden');
+            }
+        });
 
         return this;
     };
