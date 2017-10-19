@@ -3,7 +3,7 @@
  * @author Friends of REDAXO
  */
 
-class structure_tweaks_hide_category_functions extends structure_tweaks_base
+class structure_tweaks_hide_categories extends structure_tweaks_base
 {
     /**
      * Check page and category, hide if necessary
@@ -24,9 +24,9 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
     protected static function getHiddenCategories($non_admin = false)
     {
         if ($non_admin) {
-            $type = 'hide_cat_functions_non_admin';
+            $type = 'hide_categories_non_admin';
         } else {
-            $type = 'hide_cat_functions';
+            $type = 'hide_categories';
         }
 
         return self::getArticles($type);
@@ -66,9 +66,9 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
             <script>
                 $(function() {
                     var structureTweaks_hideCategories = new structureTweaks();
-                    structureTweaks_hideCategories.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctions();
+                    structureTweaks_hideCategories.setHiddenCategoryRows(\''.json_encode($hidden_categories).'\').hideCategories();
                     $(document).on("pjax:end", function() {
-                        structureTweaks_hideCategories.hideCategoryFunctions();
+                        structureTweaks_hideCategories.hideCategories();
                     });
                 });
             </script>

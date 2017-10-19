@@ -115,7 +115,11 @@ class structure_tweaks_page_categories extends structure_tweaks_base
         $select->setSize(1);
         $select->addOption('---', '');
         $select->addOption(self::msg('hide_startarticle'), 'hide_startarticle');
+        $select->addOption(self::msg('hide_startarticle_non_admin'), 'hide_startarticle_non_admin');
         $select->addOption(self::msg('hide_category_functions'), 'hide_cat_functions');
+        $select->addOption(self::msg('hide_category_functions_non_admin'), 'hide_cat_functions_non_admin');
+        $select->addOption(self::msg('hide_categories'), 'hide_categories');
+        $select->addOption(self::msg('hide_categories_non_admin'), 'hide_categories_non_admin');
         $select->addOption(self::msg('split_category'), 'split_category');
 
         $field = $form->addTextField('label');
@@ -184,7 +188,11 @@ class structure_tweaks_page_categories extends structure_tweaks_base
         $text = [
             '' => '---',
             'hide_startarticle' => self::msg('hide_startarticle'),
+            'hide_startarticle_non_admin' => self::msg('hide_startarticle_non_admin'),
             'hide_cat_functions' => self::msg('hide_category_functions'),
+            'hide_cat_functions_non_admin' => self::msg('hide_category_functions_non_admin'),
+            'hide_categories' => self::msg('hide_categories'),
+            'hide_categories_non_admin' => self::msg('hide_categories_non_admin'),
             'split_category' => self::msg('split_category'),
         ];
 
