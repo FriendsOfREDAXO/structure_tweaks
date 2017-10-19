@@ -21,11 +21,18 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
     }
 
     /**
+     * @param bool $non_admin
      * @return array
      */
-    protected static function getHiddenArticles()
+    protected static function getHiddenArticles($non_admin = false)
     {
-        return self::getArticles('hide_startarticle');
+        if ($non_admin) {
+            $type = 'hide_startarticle_non_admin';
+        } else {
+            $type = 'hide_startarticle';
+        }
+
+        return self::getArticles($type);
     }
 
     /**
@@ -38,18 +45,36 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
         $subject = $ep->getSubject();
 
         // Pass hidden articles to JavaScript
-        $subject .= '
+        $hidden_articles = self::getHiddenArticles();
+            if (!empty($hidden_articles)) {
+                $subject .= self::getScript($hidden_articles);
+        }
+
+        // Pass hidden non-admin articles to JavaScript
+        $hidden_articles = self::getHiddenArticles(true);
+        if (!empty($hidden_articles) && !rex::getUser()->isAdmin()) {
+            $subject .= self::getScript($hidden_articles);
+        }
+
+        return $subject;
+    }
+
+    /**
+     * @param array $hidden_articles
+     * @return string
+     */
+    protected static function getScript($hidden_articles)
+    {
+        return '
             <script>
                 $(function() {
                     var structureTweaks_hideArticles = new structureTweaks();
-                    structureTweaks_hideArticles.setHiddenArticles(\''.json_encode(self::getHiddenArticles()).'\').hideArticles();
+                    structureTweaks_hideArticles.setHiddenArticles(\''.json_encode($hidden_articles).'\').hideArticles();
                     $(document).on("pjax:end", function() {
                         structureTweaks_hideArticles.hideArticles();
                     });
                 });
             </script>
         ';
-
-        return $subject;
     }
 }
