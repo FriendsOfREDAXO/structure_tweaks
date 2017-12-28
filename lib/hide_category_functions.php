@@ -18,18 +18,11 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
     }
 
     /**
-     * @param bool $non_admin
      * @return array
      */
-    protected static function getHiddenCategories($non_admin = false)
+    protected static function getHiddenCategories()
     {
-        if ($non_admin) {
-            $type = 'hide_cat_functions_non_admin';
-        } else {
-            $type = 'hide_cat_functions';
-        }
-
-        return self::getArticles($type);
+        return self::getArticles('hide_cat_functions');
     }
 
     /**
@@ -42,36 +35,18 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
         $subject = $ep->getSubject();
 
         // Pass hidden categories to JavaScript
-        $hidden_categories = self::getHiddenCategories();
-        if (!empty($hidden_categories)) {
-            $subject .= self::getScript($hidden_categories);
-        }
-
-        // Pass hidden non-admin categories to JavaScript
-        $hidden_categories = self::getHiddenCategories(true);
-        if (!empty($hidden_categories) && !rex::getUser()->isAdmin()) {
-            $subject .= self::getScript($hidden_categories);
-        }
-
-        return $subject;
-    }
-
-    /**
-     * @param array $hidden_categories
-     * @return string
-     */
-    protected static function getScript($hidden_categories)
-    {
-        return '
+        $subject .= '
             <script>
                 $(function() {
                     var structureTweaks_hideCategories = new structureTweaks();
-                    structureTweaks_hideCategories.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctions();
+                    structureTweaks_hideCategories.setHiddenCategories(\''.json_encode(self::getHiddenCategories()).'\').hideCategoryFunctions();
                     $(document).on("pjax:end", function() {
                         structureTweaks_hideCategories.hideCategoryFunctions();
                     });
                 });
             </script>
         ';
+
+        return $subject;
     }
 }

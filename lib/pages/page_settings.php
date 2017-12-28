@@ -39,6 +39,10 @@ class structure_tweaks_page_settings extends structure_tweaks_base
             'label' => '<label for="structure-tweaks-move-meta-info">'.$addon->i18n('move_meta_info_page').'</label>',
             'field' => '<input type="checkbox" id="structure-tweaks-move-meta-info" name="config[move_meta_info_page]" value="1" '.($addon->getConfig('move_meta_info_page') ? ' checked="checked"' : '').' />',
         ];
+        $checkbox_elements[] = [
+            'label' => '<label for="structure-tweaks-sync-cat-art">'.$addon->i18n('sync-cat-art').'</label>',
+            'field' => '<input type="checkbox" id="structure-tweaks-sync-cat-art" name="config[sync-cat-art]" value="1" '.($addon->getConfig('sync-cat-art') ? ' checked="checked"' : '').' />',
+        ];
         $fragment = new rex_fragment();
         $fragment->setVar('elements', $checkbox_elements, false);
         $checkboxes = $fragment->parse('core/form/checkbox.php');

@@ -7,6 +7,11 @@ if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
     if (rex_addon::get('metainfo')->isAvailable() || rex_addon::get('structure')->isAvailable()) {
         rex_view::addCssFile($this->getAssetsUrl('style.css'));
         rex_view::addJsFile($this->getAssetsUrl('script.js'));
+
+        // Tweak redaxo skin to keep structure table aligned
+        if (rex_plugin::get('be_style', 'redaxo')->isAvailable()) {
+            rex_view::addCssFile($this->getAssetsUrl('style-redaxo.css'));
+        }
     }
 
     // Hide startarticles
@@ -15,14 +20,15 @@ if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
     // Hide category functions
     structure_tweaks_hide_category_functions::init();
 
-    // Hide categories
-    structure_tweaks_hide_categories::init();
-
     // Split categories
     structure_tweaks_category_splitter::init();
 
     // Move meta infos
     if ($this->getConfig('move_meta_info_page')) {
+        structure_tweaks_move_metainfo::init();
+    }
+    // Sync Category + Article Names
+    if ($this->getConfig('sync_cat_art')) {
         structure_tweaks_move_metainfo::init();
     }
 }

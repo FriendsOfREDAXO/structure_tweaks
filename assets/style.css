@@ -24,12 +24,6 @@
 .rex-startarticle.is-hidden {
     display: none !important;
 }
-/**
- * Hide Categories
- */
-.structure-tweaks-category.is-hidden {
-    display: none !important;
-}
 
 /**
  * Hide category status
