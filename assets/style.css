@@ -39,6 +39,9 @@
 .structure-tweaks-container .structure-tweaks-status a {
     display: none !important;
 }
+.structure-tweaks-metainfos .structure-tweaks-status.is-hidden {
+    display: none !important;
+}
 
 /**
  * Category splitter

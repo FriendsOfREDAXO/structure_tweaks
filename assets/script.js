@@ -125,6 +125,7 @@ var structureTweaks = function() {
             var searchStart = 'index.php?page=structure&category_id=' + categoryId + '&article_id=' + articleId + '&clang=' + clangId;
             var searchEnd   = '&catstart=' + catStart;
 
+            // Page structure
             if (deprecatedTraversing) {
                 var $categoryStatus = $('a[href="' + searchStart + '&category-id=' + this.hiddenCategories[i] + '&rex-api-call=category_status' + searchEnd + '"]');
                 if ($categoryStatus.length) {
@@ -151,7 +152,13 @@ var structureTweaks = function() {
                         .next().addClass('structure-tweaks-status');
                 }
             }
-        }
+
+            // Page content/edit
+            if (articleId == this.hiddenCategories[i]) {
+                $('.structure-tweaks-metainfos').find('.structure-tweaks-status').addClass('is-hidden');
+            }
+       }
+
 
         return this;
     };

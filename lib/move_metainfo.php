@@ -64,12 +64,12 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
         $article_status = self::getArticleStatus($article_id, $clang_id);
 
         return '
-            <dl class="dl-horizontal text-left">
+            <dl class="dl-horizontal text-left structure-tweaks-metainfos">
                 <dt>'.rex_i18n::msg('created_by').'</dt><dd>'.$article->getValue('createuser').'</dd>
                 <dt>'.rex_i18n::msg('created_on').'</dt><dd>'.rex_formatter::strftime($article->getValue('createdate'), 'date').'</dd>
                 <dt>'.rex_i18n::msg('updated_by').'</dt><dd>'.$article->getValue('updateuser').'</dd>
                 <dt>'.rex_i18n::msg('updated_on').'</dt><dd>'.rex_formatter::strftime($article->getValue('updatedate'), 'date').'</dd>
-                <dt>'.rex_i18n::msg('status').'</dt><dd>'.$article_status.'</dd>
+                <dt class="structure-tweaks-status">'.rex_i18n::msg('status').'</dt><dd class="structure-tweaks-status">'.$article_status.'</dd>
             </dl>
         ';
     }

@@ -11,7 +11,10 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
     public static function init()
     {
         rex_extension::register('PACKAGES_INCLUDED', function () {
-            if (rex_addon::get('structure')->isAvailable() && rex_request('page', 'string') == 'structure') {
+            if (
+                (rex_addon::get('structure')->isAvailable() && rex_request('page', 'string') == 'structure') ||
+                (rex_plugin::get('structure', 'content')->isAvailable() && rex_request('page', 'string') == 'content/edit')
+            ) {
                 rex_extension::register('PAGE_HEADER', [__CLASS__, 'ep']);
             }
         });
