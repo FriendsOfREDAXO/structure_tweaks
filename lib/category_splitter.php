@@ -48,17 +48,20 @@ class structure_tweaks_category_splitter extends structure_tweaks_base
         $subject = $ep->getSubject();
 
         // Pass splitting categories to JavaScript
-        $subject .= '
-            <script>
-                $(function() {
-                    var structureTweaks_splitCategories = new structureTweaks();
-                    structureTweaks_splitCategories.setSplitterCategories(\''.json_encode(self::getSplitterCategories()).'\').splitCategories();
-                    $(document).on("pjax:end", function() {
-                        structureTweaks_splitCategories.splitCategories();
+        $split_categories = self::getSplitterCategories();
+        if (!empty($split_categories)) {
+            $subject .= '
+                <script>
+                    $(function() {
+                        var structureTweaks_splitCategories = new structureTweaks();
+                        structureTweaks_splitCategories.setSplitterCategories(\''.json_encode($split_categories).'\').splitCategories();
+                        $(document).on("pjax:end", function() {
+                            structureTweaks_splitCategories.splitCategories();
+                        });
                     });
-                });
-            </script>
-        ';
+                </script>
+            ';
+        }
 
         return $subject;
     }
