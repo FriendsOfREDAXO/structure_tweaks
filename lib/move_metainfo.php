@@ -188,15 +188,13 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
 
         if ($article->isStartArticle()) {
             $article_link = $context->getUrl([
-                'rex-api-call' => 'category_status',
                 'catstart' => $catstart,
                 'category-id' => $article->getCategoryId(),
-            ]);
+            ] +  rex_api_category_status::getUrlParams());
         } else {
             $article_link = $context->getUrl([
-                'rex-api-call' => 'article_status',
                 'artstart' => $artstart
-            ]);
+            ] +  rex_api_article_status::getUrlParams());
         }
 
         if ($perm && rex::getUser()->hasPerm('publishArticle[]')) {
