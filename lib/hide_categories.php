@@ -65,10 +65,10 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
         return '
             <script>
                 $(function() {
-                    var structureTweaks_hideCategories = new structureTweaks();
-                    structureTweaks_hideCategories.setHiddenCategoryRows(\''.json_encode($hidden_categories).'\').hideCategories();
+                    var structureTweaks_hideCategoryRows = new structureTweaks();
+                    structureTweaks_hideCategoryRows.setHiddenCategoryRows(\''.json_encode($hidden_categories).'\').hideCategories();
                     $(document).on("pjax:end", function() {
-                        structureTweaks_hideCategories.hideCategories();
+                        structureTweaks_hideCategoryRows.hideCategories();
                     });
                 });
             </script>
