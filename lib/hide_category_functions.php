@@ -36,6 +36,21 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
     }
 
     /**
+     * @param bool $non_admin
+     * @return array
+     */
+    protected static function getHiddenCategoriesAll($non_admin = false)
+    {
+        if ($non_admin) {
+            $type = 'hide_cat_functions_all_non_admin';
+        } else {
+            $type = 'hide_cat_functions_all';
+        }
+
+        return self::getArticles($type);
+    }
+
+    /**
      * EP CALLBACK
      * @param rex_extension_point $ep
      * @return string
@@ -54,6 +69,18 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
         $hidden_categories = self::getHiddenCategories(true);
         if (!empty($hidden_categories) && !rex::getUser()->isAdmin()) {
             $subject .= self::getScript($hidden_categories);
+        }
+
+        // Pass hidden categories to JavaScript
+        $hidden_categories = self::getHiddenCategoriesAll();
+        if (!empty($hidden_categories)) {
+            $subject .= self::getScriptAll($hidden_categories);
+        }
+
+        // Pass hidden non-admin categories to JavaScript
+        $hidden_categories = self::getHiddenCategoriesAll(true);
+        if (!empty($hidden_categories) && !rex::getUser()->isAdmin()) {
+            $subject .= self::getScriptAll($hidden_categories);
         }
 
         return $subject;
@@ -77,6 +104,30 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
                     structureTweaks_hideCategories.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctions('.$deprecated_traversing.');
                     $(document).on("pjax:end", function() {
                         structureTweaks_hideCategories.hideCategoryFunctions();
+                    });
+                });
+            </script>
+        ';
+    }
+
+    /**
+     * @param array $hidden_categories
+     * @return string
+     */
+    protected static function getScriptAll($hidden_categories)
+    {
+        $deprecated_traversing = 'false';
+        if (version_compare(rex::getVersion(), '5.5.0', '<')) {
+            $deprecated_traversing = 'true';
+        }
+
+        return '
+            <script>
+                $(function() {
+                    var structureTweaks_hideCategoriesAll = new structureTweaks();
+                    structureTweaks_hideCategoriesAll.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctionsAll('.$deprecated_traversing.');
+                    $(document).on("pjax:end", function() {
+                        structureTweaks_hideCategoriesAll.hideCategoryFunctions();
                     });
                 });
             </script>

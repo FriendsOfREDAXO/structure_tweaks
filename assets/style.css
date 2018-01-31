@@ -34,8 +34,12 @@
 /**
  * Hide category status
  */
-/*.structure-tweaks-container .structure-tweaks-meta a,*/
-/*.structure-tweaks-container .structure-tweaks-delete a,*/
+.structure-tweak-functions-all,
+.structure-tweaks-container-all .structure-tweaks-meta a,
+.structure-tweaks-container-all .structure-tweaks-delete a,
+.structure-tweaks-container-all .structure-tweaks-status a {
+    display: none !important;
+}
 .structure-tweaks-container .structure-tweaks-status a {
     display: none !important;
 }
