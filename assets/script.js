@@ -97,9 +97,10 @@ var structureTweaks = function() {
 
     /**
      * Hide category functions
+     * @param deprecatedTraversing
      * @returns {structureTweaks}
      */
-    this.hideCategoryFunctions = function() {
+    this.hideCategoryFunctions = function(deprecatedTraversing) {
         var clangId = this.getUrlVars('clang');
         if (clangId === undefined) {
             clangId = 1;
@@ -124,19 +125,31 @@ var structureTweaks = function() {
             var searchStart = 'index.php?page=structure&category_id=' + categoryId + '&article_id=' + articleId + '&clang=' + clangId;
             var searchEnd   = '&catstart=' + catStart;
 
-            var $categoryStatus = $('a[href="' + searchStart + '&category-id=' + this.hiddenCategories[i] + '&rex-api-call=category_status' + searchEnd + '"]');
-            if ($categoryStatus.length) {
-                $categoryStatus.parents('td').addClass('structure-tweaks-status').parents('tr').addClass('structure-tweaks-container');
-            }
+            if (deprecatedTraversing) {
+                var $categoryStatus = $('a[href="' + searchStart + '&category-id=' + this.hiddenCategories[i] + '&rex-api-call=category_status' + searchEnd + '"]');
+                if ($categoryStatus.length) {
+                    $categoryStatus.parents('td').addClass('structure-tweaks-status').parents('tr').addClass('structure-tweaks-container');
+                }
 
-            var $categoryDelete = $('a[href="' + searchStart + '&category-id=' + this.hiddenCategories[i] + '&rex-api-call=category_delete' + searchEnd + '"]');
-            if ($categoryDelete.length) {
-                $categoryDelete.parents('td').addClass('structure-tweaks-delete').parents('tr').addClass('structure-tweaks-container');
-            }
+                var $categoryDelete = $('a[href="' + searchStart + '&category-id=' + this.hiddenCategories[i] + '&rex-api-call=category_delete' + searchEnd + '"]');
+                if ($categoryDelete.length) {
+                    $categoryDelete.parents('td').addClass('structure-tweaks-delete').parents('tr').addClass('structure-tweaks-container');
+                }
 
-            var $categoryMeta = $('a[href="' + searchStart + '&edit_id=' + this.hiddenCategories[i] + '&function=edit_cat' + searchEnd + '"]');
-            if ($categoryMeta.length) {
-                $categoryMeta.parents('td').addClass('structure-tweaks-meta').parents('tr').addClass('structure-tweaks-container');
+                var $categoryMeta = $('a[href="' + searchStart + '&edit_id=' + this.hiddenCategories[i] + '&function=edit_cat' + searchEnd + '"]');
+                if ($categoryMeta.length) {
+                    $categoryMeta.parents('td').addClass('structure-tweaks-meta').parents('tr').addClass('structure-tweaks-container');
+                }
+            } else {
+                var $categoryMeta = $('a[href="' + searchStart + '&edit_id=' + this.hiddenCategories[i] + '&function=edit_cat' + searchEnd + '"]');
+                if ($categoryMeta.length) {
+                    var $categoryActions = $categoryMeta.parents('tr').addClass('structure-tweaks-container').find('.rex-table-action');
+
+                    $categoryActions
+                        .first().addClass('structure-tweaks-meta')
+                        .next().addClass('structure-tweaks-delete')
+                        .next().addClass('structure-tweaks-status');
+                }
             }
         }
 

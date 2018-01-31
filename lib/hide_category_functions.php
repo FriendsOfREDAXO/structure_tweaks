@@ -62,11 +62,16 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
      */
     protected static function getScript($hidden_categories)
     {
+        $deprecated_traversing = 'false';
+        if (version_compare(rex::getVersion(), '5.5.0', '<')) {
+            $deprecated_traversing = 'true';
+        }
+
         return '
             <script>
                 $(function() {
                     var structureTweaks_hideCategories = new structureTweaks();
-                    structureTweaks_hideCategories.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctions();
+                    structureTweaks_hideCategories.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctions('.$deprecated_traversing.');
                     $(document).on("pjax:end", function() {
                         structureTweaks_hideCategories.hideCategoryFunctions();
                     });
