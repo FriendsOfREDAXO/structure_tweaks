@@ -9,11 +9,15 @@ Falls man jedoch Kategorien ähnlich wie Dateiordner als reine Datensilos nutzen
 Es können Artikel bestimmt werden, die in der Übersicht nicht sichtbar sein sollen. 
 Die Artikel werden über CSS ausgeblendet. Evtl. vorhandene Inhalte bleiben also bestehen und werden im Frontend angezeigt.
 
-### 2. Breitere Trenner in der Kategorienübersicht
+### 2. Funktionen ausblenden
+
+Es können die Funktionen zum Löschen und zur Statusänderung und der Funktionen-Tab ausgeblendet werden.
+
+### 3. Breitere Trenner in der Kategorienübersicht
 
 Es können Kategorien bestimmt werden, vor denen ein breiter Trenner erscheinen soll.  
 
-### 3. Artikel-Metadaten in der Seitenspalte anzeigen
+### 4. Artikel-Metadaten in der Seitenspalte anzeigen
 
 Die Artikel-Metainfos des Metainfo-Addons können optional statt in einem Tab in der Seitenspalte angezeigt werden. Dort werden sie mit den Metadaten der strukturansicht kombiniert. 
 Außerdem kann die Anzeige des Artikelstatus zum On- und Offlineschalten des Artikels genutzt werden. 
