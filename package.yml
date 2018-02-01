@@ -4,7 +4,7 @@ author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO
 
 requires:
-    redaxo: '^5.2.0'
+    redaxo: '^5.5.0'
     packages:
         structure: '^2.2.0'
 
