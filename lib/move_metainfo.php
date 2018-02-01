@@ -186,15 +186,30 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
         $article_class = $article_status_types[$article->getValue('status')][1];
         $article_icon = $article_status_types[$article->getValue('status')][2];
 
-        if ($article->isStartArticle()) {
-            $article_link = $context->getUrl([
-                'catstart' => $catstart,
-                'category-id' => $article->getCategoryId(),
-            ] +  rex_api_category_status::getUrlParams());
+        if (version_compare(rex::getVersion(), '5.5.0', '<')) {
+            if ($article->isStartArticle()) {
+                $article_link = $context->getUrl([
+                    'rex-api-call' => 'category_status',
+                    'catstart' => $catstart,
+                    'category-id' => $article->getCategoryId(),
+                ]);
+            } else {
+                $article_link = $context->getUrl([
+                    'rex-api-call' => 'article_status',
+                    'artstart' => $artstart
+                ]);
+            }
         } else {
-            $article_link = $context->getUrl([
-                'artstart' => $artstart
-            ] +  rex_api_article_status::getUrlParams());
+            if ($article->isStartArticle()) {
+                $article_link = $context->getUrl([
+                    'catstart' => $catstart,
+                    'category-id' => $article->getCategoryId(),
+                ] + rex_api_category_status::getUrlParams());
+            } else {
+                $article_link = $context->getUrl([
+                    'artstart' => $artstart
+                ] + rex_api_article_status::getUrlParams());
+            }
         }
 
         if ($perm && rex::getUser()->hasPerm('publishArticle[]')) {
