@@ -214,30 +214,24 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
 
             if ($perm && rex::getUser()->hasPerm('publishArticle[]')) {
 
+              $ooArt = rex_article::get($article_id, $clang);
+              $data['category_id'] = $ooArt->getCategoryId();
+
               $legend = rex_i18n::msg('edit_template') . ' <small class="rex-primary-id">' . rex_i18n::msg('id') . ' = ' . $template_id . '</small>';
-              $hole = rex_sql::factory();
-              $hole->setQuery('SELECT * FROM ' . rex::getTablePrefix() . 'template ');
-              if ($hole->getRows() == 1) {
-                  $templatename = $hole->getValue('name');
-                  $template = $hole->getValue('content');
-                  $active = $hole->getValue('active');
-                  $attributes = $hole->getArrayValue('attributes');
-              } else {
-                  $function = '';
-              }
 
-              $tpl_list = ($hole->getArray());
+              if (rex_plugin::get('structure', 'content')->isAvailable()) {
+                $templates = rex_template::getTemplatesForCategory($data['category_id']);
 
-              $select = new rex_select();
-              $select->setName('tweak_template');
-              $select->setAttribute('class', 'form-control tweak_template');
-              $select->setAttributes([]);
-              foreach ($tpl_list as $t) {
-                $select->addOption($t["name"],$t["id"]);
+                $select = new rex_select();
+                $select->setName('tweak_template');
+                $select->setAttribute('class', 'form-control tweak_template');
+                $select->setAttributes([]);
+                foreach ($templates as $tid => $tname) {
+                  $select->addOption($tname,$tid);
+                }
+                $select->setSelected($article_template_id);
+                $return = $select->get();
               }
-              $select->setSelected($article_template_id);
-              $return = $select->get();
-                #$return = '<a class="'.$article_class.'" href="'.$article_link.'"><i class="rex-icon '.$article_icon.'"></i> '.$article_status.'</a>';
             } else {
                 $return = '<span class="'.$article_class.' text-muted"><i class="rex-icon '.$article_icon.'"></i> '.$article_template.'</span>';
             }
