@@ -186,32 +186,6 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
 
             $article_template_id = $article->getTemplateId();
 
-            if (version_compare(rex::getVersion(), '5.5.0', '<')) {
-                if ($article->isStartArticle()) {
-                    $article_link = $context->getUrl([
-                        'rex-api-call' => 'category_status',
-                        'catstart' => $catstart,
-                        'category-id' => $article->getCategoryId(),
-                    ]);
-                } else {
-                    $article_link = $context->getUrl([
-                        'rex-api-call' => 'article_status',
-                        'artstart' => $artstart
-                    ]);
-                }
-            } else {
-                if ($article->isStartArticle()) {
-                    $article_link = $context->getUrl([
-                        'catstart' => $catstart,
-                        'category-id' => $article->getCategoryId(),
-                    ] + rex_api_category_status::getUrlParams());
-                } else {
-                    $article_link = $context->getUrl([
-                        'artstart' => $artstart
-                    ] + rex_api_article_status::getUrlParams());
-                }
-            }
-
             if ($perm && rex::getUser()->hasPerm('publishArticle[]')) {
 
               $ooArt = rex_article::get($article_id, $clang);
