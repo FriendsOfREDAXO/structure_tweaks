@@ -15,6 +15,3 @@ page:
         categories: { title: translate:page_categories }
         settings: { title: translate:page_settings }
         info: { title: translate:page_info }
-
-requires:
-    redaxo: '>=5.1.0'
