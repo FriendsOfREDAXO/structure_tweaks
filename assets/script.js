@@ -370,12 +370,8 @@ var structureTweaks = function() {
           cache:false
       }).responseText);
       
-      console.log('lastModifiedCategoriesFkt');
-
       this.lastModifiedCategories = data;
       
-      console.log(data);
-        
         var clangId = this.getUrlVars('clang');
         if (clangId === undefined) {
             clangId = 1;
@@ -388,8 +384,6 @@ var structureTweaks = function() {
         for (var i = 0; i < this.lastModifiedCategories.length; i++) {
           
             var search = 'index.php?page=structure&category_id=' + this.lastModifiedCategories[i]['article_id'] + '&article_id=0&clang=' + clangId;
-            
-            console.log(search);
             var $categoryRow = $('a[href="' + search + '"]');
             var datewidth = this.lastModifiedCategories[i]['datewidth'];
             var userwidth = this.lastModifiedCategories[i]['userwidth'];
@@ -417,6 +411,8 @@ var structureTweaks = function() {
 
         // fill first row (rex-icon rex-icon-open-category)
         jQuery('.rex-page-section tr').find('td.rex-table-icon i.rex-icon-open-category').parents('tr').find('td.rex-table-priority').before('<td class="rex-table-lastmodified" width=""></td><td class="rex-table-lastmodified-user"  width=""></td>');
+        
+        jQuery('.rex-page-section tr.structure-tweaks-splitter').find('td:nth-child(3)').attr('colspan',6);
         
         // set head
         jQuery('.rex-page-section').first().find ('table thead tr').find('th.rex-table-priority').before('<th class="rex-table-lastmodified" colspan="2"  >Letzte Änderung</th>');
