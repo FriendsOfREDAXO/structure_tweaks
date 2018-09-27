@@ -361,22 +361,22 @@ var structureTweaks = function() {
      * lastModfiedCategories
      * @returns {structureTweaks}
      */
-    this.lastModifiedCategoriesFkt = function() {   
+    
+    
+    
+    this.lastModifiedCategoriesFkt = function() {
       
-      var data = $.parseJSON($.ajax({
-          url:  '/index.php?rex-api-call=getLastModifiedCategories',
-          dataType: "json", 
-          async: false,
-          cache:false
-      }).responseText);
-      
-      this.lastModifiedCategories = data;
-      
-        var clangId = this.getUrlVars('clang');
+      var handleData = function (data) {
+          
+        this.lastModifiedCategories =  $.parseJSON(data);          
+
+        var clangId = $.makeArray(this.getUrlVars('clang'));
+        clangId = clangId[0]['clang'];        
         if (clangId === undefined) {
             clangId = 1;
         }
-        var articleId = this.getUrlVars('article_id');
+        var articleId = $.makeArray(this.getUrlVars('article_id'));
+        articleId = articleId[0]['article_id'];
         if (articleId === undefined) {
             articleId = 0;
         }      
@@ -387,9 +387,9 @@ var structureTweaks = function() {
             var $categoryRow = $('a[href="' + search + '"]');
             var datewidth = this.lastModifiedCategories[i]['datewidth'];
             var userwidth = this.lastModifiedCategories[i]['userwidth'];
-          
+            
             // Insert splitter
-            if ($categoryRow.length) {            
+            if ($categoryRow.length) { 
                 // skip level up            
                 if ($categoryRow.parents('tr').find('td.rex-table-id').html() != "-")              
                   $categoryRow.parents('tr').find('td.rex-table-priority').before('<td class="rex-table-lastmodified" width="' + datewidth + '">' + this.lastModifiedCategories[i]['updatedate'] + '</td><td class="rex-table-lastmodified-user"  width="' + userwidth + '"> '+ this.lastModifiedCategories[i]['updateuser'] + '</td>');
@@ -417,40 +417,52 @@ var structureTweaks = function() {
         // set head
         jQuery('.rex-page-section').first().find ('table thead tr').find('th.rex-table-priority').before('<th class="rex-table-lastmodified" colspan="2"  >Letzte Änderung</th>');
         
-
+        return this;
+        
+      };
       
-      return this;
+      getData();      
+      
+      function getData() {
+        $.ajax({
+          url:  '/index.php?rex-api-call=getLastModifiedCategories',
+          async: true,
+          cache:false,
+          success :  function (data) {
+            handleData(data);
+          }
+        })
+     }
   };
   
   
-  
-    /**
-     * lastModfiedArticles
-     * @returns {structureTweaks}
-     */
-    this.lastModifiedArticlesFkt = function() {
+  /**
+   * lastModfiedArticles
+   * @returns {structureTweaks}
+   */
+  this.lastModifiedArticlesFkt = function() {
     
-       var data = $.parseJSON($.ajax({
-          url:  '/index.php?rex-api-call=getLastModifiedCategories',
-          dataType: "json", 
-          async: false,
-          cache:false
-      }).responseText);
-    
-      this.lastModifiedArticles = data;
+    var handleArticleData = function (data) {
       
-      var clangId = this.getUrlVars('clang');
+      this.lastModifiedArticles = $.parseJSON(data);  
+      
+      var clangId = $.makeArray(this.getUrlVars('clang'));
+      clangId = clangId[0]['clang'];        
       if (clangId === undefined) {
           clangId = 1;
       }
-      var articleId = this.getUrlVars('article_id');
+
+      var articleId = $.makeArray(this.getUrlVars('article_id'));
+      articleId = articleId[0]['article_id'];
       if (articleId === undefined) {
           articleId = 0;
-      }  
-      var categoryId = this.getUrlVars('category_id');
+      }     
+
+      var categoryId = $.makeArray(this.getUrlVars('category_id'));
+      categoryId = categoryId[0]['category_id'];
       if (categoryId === undefined) {
         categoryId = 0;
-      }   
+      } 
       
       for (var i = 0; i < this.lastModifiedArticles.length; i++) {
   
@@ -460,6 +472,9 @@ var structureTweaks = function() {
           // start article
           var search = 'index.php?page=content/edit&category_id=' + this.lastModifiedArticles[i]['article_id'] + '&article_id=' +  this.lastModifiedArticles[i]['article_id'] + '&clang=' + clangId + '&mode=edit';
           var $articleRow = $('.rex-page-section tr.rex-startarticle a[href="' + search + '"]');
+          
+          
+          console.log(search);
           
           if ($articleRow.length) {
             $articleRow.parents('tr').find('td.rex-table-priority').before('<td class="rex-table-lastmodified" width="' + datewidth + '">' + this.lastModifiedArticles[i]['updatedate'] + '</td><td class="rex-table-lastmodified-user"  width="' + userwidth + '"> '+ this.lastModifiedArticles[i]['updateuser'] + '</td>');
@@ -484,17 +499,32 @@ var structureTweaks = function() {
          
           
       }
+      
       // Addmode
       if ( $('.rex-page-section').first().next().find('tr.mark').find('td:nth-child(3) input').val() == "" ) {
         $('.rex-page-section').first().next().find('tr.mark').find('td.rex-table-priority').before('<td class="rex-table-lastmodified" width=""></td><td class="rex-table-lastmodified-user"  width=""></td>');
       }
       
-     
-      
       //article
       jQuery('.rex-page-section').first().next().find ('table thead tr').find('th.rex-table-priority').before('<th class="rex-table-lastmodified" colspan="2"  >Letzte Änderung</th>');
       
       return this;
-  };
-  
+      
+    } // handleArticleData
+    
+    getArticleData();      
+    
+    function getArticleData() {
+      $.ajax({
+        url:  '/index.php?rex-api-call=getLastModifiedCategories',
+        async: true,
+        cache:false,
+        success :  function (data) {
+          handleArticleData(data);
+        }
+      })
+   }; // getArticleData
+
+   
+  }; // lastModifiedArticlesFkt
 };
