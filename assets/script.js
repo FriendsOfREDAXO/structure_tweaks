@@ -426,7 +426,6 @@ var structureTweaks = function() {
       function getData() {
         $.ajax({
           url:  '/index.php?rex-api-call=getLastModifiedCategories',
-          async: true,
           cache:false,
           success :  function (data) {
             handleData(data);
@@ -473,9 +472,6 @@ var structureTweaks = function() {
           var search = 'index.php?page=content/edit&category_id=' + this.lastModifiedArticles[i]['article_id'] + '&article_id=' +  this.lastModifiedArticles[i]['article_id'] + '&clang=' + clangId + '&mode=edit';
           var $articleRow = $('.rex-page-section tr.rex-startarticle a[href="' + search + '"]');
           
-          
-          console.log(search);
-          
           if ($articleRow.length) {
             $articleRow.parents('tr').find('td.rex-table-priority').before('<td class="rex-table-lastmodified" width="' + datewidth + '">' + this.lastModifiedArticles[i]['updatedate'] + '</td><td class="rex-table-lastmodified-user"  width="' + userwidth + '"> '+ this.lastModifiedArticles[i]['updateuser'] + '</td>');
           }
@@ -517,7 +513,6 @@ var structureTweaks = function() {
     function getArticleData() {
       $.ajax({
         url:  '/index.php?rex-api-call=getLastModifiedCategories',
-        async: true,
         cache:false,
         success :  function (data) {
           handleArticleData(data);
