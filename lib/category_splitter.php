@@ -29,7 +29,7 @@ class structure_tweaks_category_splitter extends structure_tweaks_base
         foreach ($articles as $article) {
             $item = [
                 'article_id' => $article['article_id'],
-                'label' => $article['label'],
+                'label' => rex_i18n::translate($article['label']),
             ];
 
             $return[] = $item;
