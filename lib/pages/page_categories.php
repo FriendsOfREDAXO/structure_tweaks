@@ -53,7 +53,7 @@ class structure_tweaks_page_categories extends structure_tweaks_base
         $list = rex_list::factory('SELECT * FROM '.rex::getTable(self::name()).' ORDER BY id');
 
         $head = '<a href="'.$list->getUrl(['func' => 'add']).'"><i class="rex-icon rex-icon-add"></i></a>';
-        $body = '<a href="'.$list->getUrl(['func' => 'edit']).'"><i class="rex-icon rex-icon-table"></i></a>';
+        $body = '<i class="rex-icon rex-icon-table"></i>';
 
         $list->setNoRowsMessage(self::msg('list_rowmsg'));
 
