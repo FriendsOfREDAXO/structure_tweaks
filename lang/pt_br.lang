@@ -18,7 +18,6 @@ structure_tweaks_select = Começar artigo
 structure_tweaks_article_not_found = Artigo não encontrado
 structure_tweaks_type = Tipo
 structure_tweaks_hide_startarticle = Esconder "começar artigo"
-structure_tweaks_hide_category_functions = Esconder categoria de funções
 structure_tweaks_split_category = Separador de categorias
 structure_tweaks_move_meta_info_page = Exibir artigo de banco de dados na barra lateral
 structure_tweaks_save = Salvar
