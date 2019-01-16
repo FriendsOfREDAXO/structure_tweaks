@@ -10,20 +10,18 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
      */
     public static function init()
     {
-        rex_extension::register('PACKAGES_INCLUDED', function () {
-            if (rex_addon::get('metainfo')->isAvailable()) {
-                // Remove meta info tab
-                rex_addon::get('metainfo')->removeProperty('pages');
+        if (rex_addon::get('metainfo')->isAvailable()) {
+            // Remove meta info tab
+            rex_addon::get('metainfo')->removeProperty('pages');
 
-                // Metainfo js
-                if (rex_be_controller::getCurrentPagePart(1) == 'content') {
-                    rex_view::addJsFile(rex_url::addonAssets('metainfo', 'metainfo.js'));
-                }
-
-                // Redirect meta info into sidebar
-                rex_extension::register('STRUCTURE_CONTENT_SIDEBAR', [__CLASS__, 'getMetaPage']);
+            // Metainfo js
+            if (rex_be_controller::getCurrentPagePart(1) == 'content') {
+                rex_view::addJsFile(rex_url::addonAssets('metainfo', 'metainfo.js'));
             }
-        });
+
+            // Redirect meta info into sidebar
+            rex_extension::register('STRUCTURE_CONTENT_SIDEBAR', [__CLASS__, 'getMetaPage']);
+        }
     }
 
     /**
@@ -48,12 +46,12 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
         $fragment->setVar('collapsed', false);
         $content = $fragment->parse('core/page/section.php');
 
-        return $content.$subject;
+        return $subject.$content;
     }
 
     /**
      * Substituted metadata panel
-     * @see redaxo/src/addons/metainfo/extensions/extension_content_sidebar.php
+     * @see redaxo/src/addons/structure/plugins/content/boot.php
      * @return string
      */
     protected static function getStructure()
