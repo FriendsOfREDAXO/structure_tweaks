@@ -301,7 +301,7 @@ var structureTweaks = function() {
             }
 
             // Insert splitter
-            if ($categoryRow.length) {
+            if ($categoryRow.length && !$categoryRow.parents('tr').hasClass('is-hidden')) {
                 $categoryRow
                     .parents('tr').before('<tr class="structure-tweaks-splitter"><td colspan="2"></td><td>' + label + '</td><td colspan="4"></td></tr>')
                     .parents('.panel').addClass('structure-tweaks-splitted');
