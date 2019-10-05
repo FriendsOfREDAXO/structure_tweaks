@@ -11,7 +11,9 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
     public static function init()
     {
         rex_extension::register('PACKAGES_INCLUDED', function () {
-            if (rex_addon::get('structure')->isAvailable() && rex_request('page', 'string') == 'structure') {
+            if (rex_addon::get('structure')->isAvailable() &&
+                (rex_request('page', 'string') == 'structure' || rex_request('page', 'string') == 'linkmap')
+            ) {
                 rex_extension::register('PAGE_HEADER', [__CLASS__, 'ep']);
             }
         });
@@ -44,13 +46,23 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
         // Pass hidden categories to JavaScript
         $hidden_categories = self::getHiddenCategories();
         if (!empty($hidden_categories)) {
+            if (rex_request('page', 'string') == 'structure') {
             $subject .= self::getScript($hidden_categories);
+        }
+            if (rex_request('page', 'string') == 'linkmap') {
+                $subject .= self::getScriptInLinkmap($hidden_categories);
+            }
         }
 
         // Pass hidden non-admin categories to JavaScript
         $hidden_categories = self::getHiddenCategories(true);
         if (!empty($hidden_categories) && !rex::getUser()->isAdmin()) {
+            if (rex_request('page', 'string') == 'structure') {
             $subject .= self::getScript($hidden_categories);
+        }
+            if (rex_request('page', 'string') == 'linkmap') {
+                $subject .= self::getScriptInLinkmap($hidden_categories);
+            }
         }
 
         return $subject;
@@ -69,6 +81,25 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
                     structureTweaks_hideCategoryRows.setHiddenCategoryRows(\''.json_encode($hidden_categories).'\').hideCategories();
                     $(document).on("pjax:end", function() {
                         structureTweaks_hideCategoryRows.hideCategories();
+                    });
+                });
+            </script>
+        ';
+    }
+
+    /**
+     * @param array $hidden_categories
+     * @return string
+     */
+    protected static function getScriptInLinkmap($hidden_categories)
+    {
+        return '
+            <script>
+                $(function() {
+                    var structureTweaks_hideCategoryRows = new structureTweaks();
+                    structureTweaks_hideCategoryRows.setHiddenCategoryRows(\''.json_encode($hidden_categories).'\').hideCategories();
+                    $(document).on("ready pjax:end", function() {
+                        structureTweaks_hideCategoryRows.hideCategoriesInLinkmap();
                     });
                 });
             </script>
