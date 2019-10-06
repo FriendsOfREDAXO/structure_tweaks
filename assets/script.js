@@ -279,6 +279,23 @@ var structureTweaks = function() {
     };
 
     /**
+     * Hide categories
+     * @returns {structureTweaks}
+     */
+    this.hideCategoriesInLinkmap = function() {
+        var that = this;
+        jQuery(".rex-linkmap-list-group").first().find(".list-group-item a").each(function() {
+            var regex = /.*category_id=(\d*)&clang=.*/;
+            var categoryId = regex.exec($(this).attr('href'));
+            if (categoryId[1] !== 'undefined' && that.hiddenCategoryRows.indexOf(categoryId[1]) >= 0) {
+                $(this).parents('li').addClass('structure-tweaks-category is-hidden');
+            }
+        });
+
+        return this;
+    };
+
+    /**
      * Split categories
      * @returns {structureTweaks}
      */
