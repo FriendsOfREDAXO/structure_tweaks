@@ -22,6 +22,10 @@ if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
     structure_tweaks_category_splitter::init();
 
     if (rex_string::versionCompare(rex::getVersion(), '5.10.0-dev', '<')) {
+        // load settings page
+        $page = $this->getProperty('page');
+        $page['subpages']['settings'] = ['title' => $this->i18n('structure_tweaks_page_settings')];
+        $this->setProperty('page', $page);
         // Move meta infos
         if ($this->getConfig('move_meta_info_page')) {
             structure_tweaks_move_metainfo::init();
