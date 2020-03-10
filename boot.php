@@ -21,8 +21,10 @@ if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
     // Split categories
     structure_tweaks_category_splitter::init();
 
-    // Move meta infos
-    if ($this->getConfig('move_meta_info_page')) {
-        structure_tweaks_move_metainfo::init();
-    }
+    if (rex_string::versionCompare(rex::getVersion(), '5.10.0-dev', '<')) {
+        // Move meta infos
+        if ($this->getConfig('move_meta_info_page')) {
+            structure_tweaks_move_metainfo::init();
+        }
+     }
 }
