@@ -20,6 +20,11 @@ if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
 
     // Split categories
     structure_tweaks_category_splitter::init();
+    
+    // Last modified categories / articles
+    if ($this->getConfig('show_lastmodified_categories') || $this->getConfig('show_lastmodified_articles') ) {
+      structure_tweaks_category_last_modified::init();
+    }
 
     if (rex_string::versionCompare(rex::getVersion(), '5.10.0-dev', '<')) {
         // load settings page
