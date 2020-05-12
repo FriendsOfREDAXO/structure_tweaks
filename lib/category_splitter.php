@@ -52,12 +52,10 @@ class structure_tweaks_category_splitter extends structure_tweaks_base
         if (!empty($split_categories)) {
             $subject .= '
                 <script>
-                    $(function() {
-                        var structureTweaks_splitCategories = new structureTweaks();
-                        structureTweaks_splitCategories.setSplitterCategories(\''.json_encode($split_categories).'\').splitCategories();
-                        $(document).on("pjax:end", function() {
-                            structureTweaks_splitCategories.splitCategories();
-                        });
+                    let structureTweaks_splitCategories = new structureTweaks();
+                    structureTweaks_splitCategories.setSplitterCategories(\''.json_encode($split_categories).'\').splitCategories();
+                    $(document).on(\'rex:ready\', function() {
+                        structureTweaks_splitCategories.splitCategories();
                     });
                 </script>
             ';
