@@ -67,12 +67,10 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
     {
         return '
             <script>
-                $(function() {
-                    var structureTweaks_hideArticles = new structureTweaks();
+                $(document).on("rex:ready", function() {
+                    let structureTweaks_hideArticles = new structureTweaks();
                     structureTweaks_hideArticles.setHiddenArticles(\''.json_encode($hidden_articles).'\').hideArticles();
-                    $(document).on("pjax:end", function() {
-                        structureTweaks_hideArticles.hideArticles();
-                    });
+                    structureTweaks_hideArticles.hideArticles();
                 });
             </script>
         ';
