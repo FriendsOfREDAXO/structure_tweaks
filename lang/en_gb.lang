@@ -27,6 +27,7 @@ structure_tweaks_hide_categories = Hide category (for all users)
 structure_tweaks_hide_categories_non_admin = Hide category (for non-admins)
 structure_tweaks_split_category = Category separator
 structure_tweaks_move_meta_info_page = Show article metadata in sidebar
+structure_tweaks_move_meta_info_to_tab = Show article metadata in a tabbed page
 structure_tweaks_save = save
 structure_tweaks_saved = Settings saved
 structure_tweaks_metadata = Metadata

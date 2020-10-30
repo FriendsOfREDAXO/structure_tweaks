@@ -18,6 +18,7 @@ class structure_tweaks_page_settings extends structure_tweaks_base
         if (rex_post('submit', 'boolean')) {
             $addon->setConfig(rex_post('config', [
                 ['move_meta_info_page', 'bool'],
+                ['move_meta_info_to_tab', 'bool'],
             ]));
 
             $message = rex_view::success($addon->i18n('saved'));
@@ -34,14 +35,22 @@ class structure_tweaks_page_settings extends structure_tweaks_base
         $addon = self::addon();
 
         // Checkboxes
-        $checkbox_elements = [];
-        $checkbox_elements[] = [
-            'label' => '<label for="structure-tweaks-move-meta-info">'.$addon->i18n('move_meta_info_page').'</label>',
-            'field' => '<input type="checkbox" id="structure-tweaks-move-meta-info" name="config[move_meta_info_page]" value="1" '.($addon->getConfig('move_meta_info_page') ? ' checked="checked"' : '').' />',
-        ];
-        $fragment = new rex_fragment();
-        $fragment->setVar('elements', $checkbox_elements, false);
-        $checkboxes = $fragment->parse('core/form/checkbox.php');
+        if (rex_string::versionCompare(rex::getVersion(), '5.10.0-dev', '<')) {
+            $checkbox_elements = [];
+            $checkbox_elements[] = [
+                'label' => '<label for="structure-tweaks-move-meta-info">'.$addon->i18n('move_meta_info_page').'</label>',
+                'field' => '<input type="checkbox" id="structure-tweaks-move-meta-info" name="config[move_meta_info_page]" value="1" '.($addon->getConfig('move_meta_info_page') ? ' checked="checked"' : '').' />',
+            ];
+        } else {
+            $checkbox_elements = [];
+            $checkbox_elements[] = [
+                'label' => '<label for="structure-tweaks-move-meta-info">'.$addon->i18n('move_meta_info_to_tab').'</label>',
+                'field' => '<input type="checkbox" id="structure-tweaks-move-meta-info" name="config[move_meta_info_to_tab]" value="1" '.($addon->getConfig('move_meta_info_to_tab') ? ' checked="checked"' : '').' />',
+            ];
+        }
+            $fragment = new rex_fragment();
+            $fragment->setVar('elements', $checkbox_elements, false);
+            $checkboxes = $fragment->parse('core/form/checkbox.php');
 
         // Submit
         $submit_elements = [];
