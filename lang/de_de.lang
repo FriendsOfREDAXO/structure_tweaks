@@ -27,6 +27,7 @@ structure_tweaks_hide_categories = Kategorie ausblenden (für alle Nutzer)
 structure_tweaks_hide_categories_non_admin = Kategorie ausblenden (für alle Nutzer außer Administratoren)
 structure_tweaks_split_category = Trenner vor Kategorie
 structure_tweaks_move_meta_info_page = Anzeige der Artikel-Metadaten in der Seitenspalte
+structure_tweaks_move_meta_info_to_tab = Anzeige der Artikel-Metadaten in einem Tab
 structure_tweaks_save = Speichern
 structure_tweaks_saved = Einstellungen gespeichert
 structure_tweaks_metadata = Metadaten
