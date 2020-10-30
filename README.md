@@ -11,22 +11,21 @@ Die Artikel werden über CSS ausgeblendet. Evtl. vorhandene Inhalte bleiben also
 
 ### 2. Funktionen ausblenden
 
-Es können die Funktionen zum Löschen und zur Statusänderung und der Funktionen-Tab ausgeblendet werden.
+Es können die Funktionen zum Löschen und zur Statusänderung sowie der Funktionen-Tab ausgeblendet werden.
 
 ### 3. Breitere Trenner in der Kategorienübersicht
 
-Es können Kategorien bestimmt werden, vor denen ein breiter Trenner erscheinen soll.  
+Es können Kategorien bestimmt werden, vor denen ein breiter Trenner mit optionalem Text erscheinen soll.  
 
 ### 4. Artikel-Metadaten 
 
 #### bis REDAXO 5.9: in der Seitenspalte anzeigen
 
-Die Artikel-Metainfos des Metainfo-Addons können optional statt in einem Tab in der Seitenspalte angezeigt werden. Dort werden sie mit den Metadaten der strukturansicht kombiniert. 
-Außerdem kann die Anzeige des Artikelstatus zum On- und Offlineschalten des Artikels genutzt werden. 
+Die Artikel-Metainfos des Metainfo-Addons können optional statt in einem Tab in der Seitenspalte angezeigt werden. Dort werden sie mit den Metadaten der Strukturansicht kombiniert. Außerdem kann die Anzeige des Artikelstatus zum On- und Offlineschalten des Artikels genutzt werden. 
 
 #### ab REDAXO 5.10: in einem Tab anzeigen
 
-Ab REDAXO 5.10 werden Metadaten als Standard in der Seitenspalte angezeigt. Das Addon ab dieser Version die Möglichkeit, die Metadaten wieder in einen Tab zu verschieben.
+Ab REDAXO 5.10 werden Metadaten als Standard in der Seitenspalte angezeigt. Das Addon bietet ab dieser REDAXO-Version die Möglichkeit, die Metadaten in einen Tab zu verschieben.
 
 ### Credits
 
