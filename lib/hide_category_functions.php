@@ -99,12 +99,10 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
 
         return '
             <script>
-                $(function() {
-                    var structureTweaks_hideCategories = new structureTweaks();
+                $(document).on("rex:ready", function() {
+                    let structureTweaks_hideCategories = new structureTweaks();
                     structureTweaks_hideCategories.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctions('.$deprecated_traversing.');
-                    $(document).on("pjax:end", function() {
-                        structureTweaks_hideCategories.hideCategoryFunctions();
-                    });
+                    structureTweaks_hideCategories.hideCategoryFunctions();
                 });
             </script>
         ';
@@ -123,12 +121,10 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
 
         return '
             <script>
-                $(function() {
-                    var structureTweaks_hideCategoriesAll = new structureTweaks();
+                $(document).on("rex:ready", function() {
+                   let structureTweaks_hideCategoriesAll = new structureTweaks();
                     structureTweaks_hideCategoriesAll.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctionsAll('.$deprecated_traversing.');
-                    $(document).on("pjax:end", function() {
-                        structureTweaks_hideCategoriesAll.hideCategoryFunctions();
-                    });
+                    structureTweaks_hideCategoriesAll.hideCategoryFunctions();
                 });
             </script>
         ';
