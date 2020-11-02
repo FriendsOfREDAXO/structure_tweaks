@@ -9,7 +9,7 @@ $table
     ->ensureColumn(new rex_sql_column('article_id', 'int(11)', false), 'id')
     ->ensureColumn(new rex_sql_column('type', 'varchar(100)', false), 'article_id')
     ->ensureColumn(new rex_sql_column('label', 'varchar(100)', false), 'type')
-    ->alter()
+    ->ensure();
 ;
 
 // Ensure that all updates are also executed on re-install
