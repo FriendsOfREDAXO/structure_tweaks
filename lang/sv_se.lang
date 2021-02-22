@@ -27,6 +27,7 @@ structure_tweaks_hide_categories = Dölj kategori (för alla användare)
 structure_tweaks_hide_categories_non_admin = Dölj kategori (för alla användare utom administratörer)
 structure_tweaks_split_category = Kategori avskiljare
 structure_tweaks_move_meta_info_page = Visa artikel-metadata i sidospalten
+structure_tweaks_move_meta_info_to_tab = Visa artikel-metadata i en flik
 structure_tweaks_save = Dpara
 structure_tweaks_saved = Inställningar sparades
 structure_tweaks_metadata = Metadata
