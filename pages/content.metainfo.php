@@ -1,5 +1,27 @@
 <?php
 
+$articleId = rex_request('article_id', 'int');
+$categoryId = rex_request('category_id', 'int');
+$clang = rex_request('clang', 'int');
+$ctype = rex_request('ctype', 'int');
+$article = rex_sql::factory();
+$article->setQuery('
+    SELECT article.*, template.attributes as template_attributes
+    FROM ' . rex::getTablePrefix() . 'article as article
+    LEFT JOIN ' . rex::getTablePrefix() . 'template as template ON template.id = article.template_id
+    WHERE article.id = ? AND clang_id = ?', [
+        $articleId,
+        $clang
+]);
+
+$context = new rex_context([
+    'page' => rex_be_controller::getCurrentPage(),
+    'article_id' => $articleId,
+    'category_id' => $categoryId,
+    'clang' => $clang,
+    'ctype' => $ctype,
+]);
+
 $content = '';
 
 if (rex_post('savemeta', 'boolean')) {
@@ -13,14 +35,14 @@ $panel = '<fieldset>
 
 $metainfoHandler = new rex_metainfo_article_handler();
 $form = $metainfoHandler->getForm([
-    'id' => $article_id,
+    'id' => $articleId,
     'clang' => $clang,
     'article' => $article,
 ]);
 
 $n = [];
 $n['label'] = '<label for="rex-id-meta-article-name">' . rex_i18n::msg('header_article_name') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="rex-id-meta-article-name" name="meta_article_name" value="' . rex_escape(rex_article::get($article_id, $clang)->getValue('name')) . '" />';
+$n['field'] = '<input class="form-control" type="text" id="rex-id-meta-article-name" name="meta_article_name" value="' . rex_escape(rex_article::get($articleId, $clang)->getValue('name')) . '" />';
 $formElements = [$n];
 
 $fragment = new rex_fragment();
