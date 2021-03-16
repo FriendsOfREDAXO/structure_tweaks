@@ -34,7 +34,7 @@ class structure_tweaks_move_metainfo_to_tab extends structure_tweaks_base
 
         libxml_use_internal_errors(true); // Disable HTML parsing warnings @see https://stackoverflow.com/questions/9149180/domdocumentloadhtml-error
         $dom = new DOMDocument('1.0', 'utf-8');
-        $dom->loadHTML($subject);
+        $dom->loadHTML(mb_convert_encoding($subject, 'HTML-ENTITIES', 'utf-8')); // Fix encoding of loadHTML https://stackoverflow.com/questions/8218230/php-domdocument-loadhtml-not-encoding-utf-8-correctly
         $metadata = $dom->getElementById('rex-page-sidebar-metainfo');
         if ($metadata) {
             $metadata->parentNode->removeChild($metadata);
