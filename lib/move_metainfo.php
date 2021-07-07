@@ -60,6 +60,7 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
         $clang_id = self::getClangId();
         $article = rex_article::get($article_id, $clang_id);
         $article_status = self::getArticleStatus($article_id, $clang_id);
+        $article_template = self::getArticleTemplate($article_id, $clang_id);
 
         return '
             <dl class="dl-horizontal text-left structure-tweaks-metainfos">
@@ -68,6 +69,7 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
                 <dt>'.rex_i18n::msg('updated_by').'</dt><dd>'.$article->getValue('updateuser').'</dd>
                 <dt>'.rex_i18n::msg('updated_on').'</dt><dd>'.rex_formatter::strftime($article->getValue('updatedate'), 'date').'</dd>
                 <dt>'.rex_i18n::msg('status').'</dt><dd class="structure-tweaks-status">'.$article_status.'</dd>
+                <dt>'.rex_i18n::msg('template').'</dt><dd class="structure-tweaks-template">'.$article_template.'</dd>
             </dl>
         ';
     }
@@ -156,6 +158,59 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
 
         return $return;
     }
+
+
+        /**
+         * Make article template switchable
+         * @see redaxo/src/addons/structure/plugins/content/pages/templates.php#L72
+         * @param int $article_id
+         * @param int $clang_id
+         * @return string
+         */
+        protected static function getArticleTemplate($article_id, $clang_id)
+        {
+            $article = rex_article::get($article_id, $clang_id);
+            $artstart = rex_request('artstart', 'int');
+            $catstart = rex_request('catstart', 'int');
+
+            $perm = rex::getUser()->getComplexPerm('structure')->hasCategoryPerm($article_id);
+
+            $context = new rex_context([
+                'page' => 'content/edit',
+                'category_id' => $article->getCategoryId(),
+                'article_id' => $article_id,
+                'clang' => $clang_id,
+            ]);
+
+            $article_template_id = $article->getTemplateId();
+
+            if ($perm && rex::getUser()->hasPerm('publishArticle[]')) {
+
+              $ooArt = rex_article::get($article_id, $clang);
+              $data['category_id'] = $ooArt->getCategoryId();
+
+              $legend = rex_i18n::msg('edit_template') . ' <small class="rex-primary-id">' . rex_i18n::msg('id') . ' = ' . $template_id . '</small>';
+
+              if (rex_plugin::get('structure', 'content')->isAvailable()) {
+                $templates = rex_template::getTemplatesForCategory($data['category_id']);
+
+                $select = new rex_select();
+                $select->setName('tweak_template');
+                $select->setAttribute('class', 'form-control tweak_template');
+                $select->setAttributes([]);
+                foreach ($templates as $tid => $tname) {
+                  $select->addOption($tname,$tid);
+                }
+                $select->setSelected($article_template_id);
+                $return = $select->get();
+              }
+            } else {
+                $return = '<span class="'.$article_class.' text-muted"><i class="rex-icon '.$article_icon.'"></i> '.$article_template.'</span>';
+            }
+
+            return $return;
+        }
+
 
     /**
      * Make article status switchable
