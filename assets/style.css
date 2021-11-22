@@ -47,3 +47,14 @@
     background-color: #F3F6FB !important;
     border-color: #F3F6FB !important;;
 }
+@media (prefers-color-scheme: dark) {
+    body.rex-has-theme:not(.rex-theme-light) .structure-tweaks-splitter,
+    body.rex-has-theme:not(.rex-theme-light) .structure-tweaks-splitter:focus,
+    body.rex-has-theme:not(.rex-theme-light) .structure-tweaks-splitter:active,
+    body.rex-has-theme:not(.rex-theme-light) .structure-tweaks-splitter:hover {
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: bold;
+        background-color: #1b232c !important;
+        border-color: #1b232c !important;;
+    }
+}
