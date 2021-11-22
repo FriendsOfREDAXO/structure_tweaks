@@ -111,6 +111,7 @@ class structure_tweaks_page_categories extends structure_tweaks_base
 
         $field = $form->addSelectField('type');
         $field->setLabel(self::msg('type'));
+        $field->setAttribute('class', 'form-control selectpicker');
         $select = $field->getSelect();
         $select->setSize(1);
         $select->addOption('---', '');
