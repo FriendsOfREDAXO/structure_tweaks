@@ -88,7 +88,7 @@ var structureTweaks = function() {
             jQuery(".rex-icon-startarticle").parents("li").addClass("rex-startarticle");
         } */
 
-        if (categoryId && this.hiddenArticles.indexOf(categoryId) > -1) {
+        if (categoryId && this.hiddenArticles.indexOf(parseInt(categoryId)) > -1) {
             jQuery(".rex-startarticle").addClass("is-hidden");
         }
 
