@@ -270,7 +270,7 @@ var structureTweaks = function() {
         var that = this;
         jQuery(".rex-page-section").first().find(".rex-table-id").each(function() {
             var categoryId = $(this).html();
-            if (that.hiddenCategoryRows.indexOf(categoryId) >= 0) {
+            if (that.hiddenCategoryRows.indexOf(parseInt(categoryId)) >= 0) {
                 $(this).parents('tr').addClass('structure-tweaks-category is-hidden');
             }
         });
