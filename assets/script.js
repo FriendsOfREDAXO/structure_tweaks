@@ -88,7 +88,7 @@ var structureTweaks = function() {
             jQuery(".rex-icon-startarticle").parents("li").addClass("rex-startarticle");
         } */
 
-        if (categoryId && this.hiddenArticles.indexOf(categoryId) > -1) {
+        if (categoryId && this.hiddenArticles.indexOf(parseInt(categoryId)) > -1) {
             jQuery(".rex-startarticle").addClass("is-hidden");
         }
 
@@ -270,7 +270,7 @@ var structureTweaks = function() {
         var that = this;
         jQuery(".rex-page-section").first().find(".rex-table-id").each(function() {
             var categoryId = $(this).html();
-            if (that.hiddenCategoryRows.indexOf(categoryId) >= 0) {
+            if (that.hiddenCategoryRows.indexOf(parseInt(categoryId)) >= 0) {
                 $(this).parents('tr').addClass('structure-tweaks-category is-hidden');
             }
         });
