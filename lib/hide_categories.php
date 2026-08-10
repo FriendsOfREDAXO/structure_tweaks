@@ -6,7 +6,6 @@
 namespace FriendsOfREDAXO\StructureTweaks;
 
 use Dom\HTMLDocument;
-use Dom\Element;
 use rex;
 use rex_addon;
 use rex_extension;
@@ -150,7 +149,7 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
         if ($element) {
             foreach ($element->getElementsByTagName('option') as $option) {
                 /** @phpstan-ignore-next-line PHP 8.4 DOM API is available at runtime */
-                if (in_array($option->getAttribute('value'), $hidden_categories, true)) {
+                if (in_array((int) $option->getAttribute('value'), $hidden_categories, true)) {
                     $element->removeChild($option);
                 }
             }
