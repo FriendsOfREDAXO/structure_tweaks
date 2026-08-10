@@ -19,13 +19,8 @@ Es können Kategorien bestimmt werden, vor denen ein breiter Trenner mit optiona
 
 ### 4. Artikel-Metadaten 
 
-#### bis REDAXO 5.9: in der Seitenspalte anzeigen
-
-Die Artikel-Metainfos des Metainfo-Addons können optional statt in einem Tab in der Seitenspalte angezeigt werden. Dort werden sie mit den Metadaten der Strukturansicht kombiniert. Außerdem kann die Anzeige des Artikelstatus zum On- und Offlineschalten des Artikels genutzt werden. 
-
-#### ab REDAXO 5.10: in einem Tab anzeigen
-
-Ab REDAXO 5.10 werden Metadaten als Standard in der Seitenspalte angezeigt. Das Addon bietet ab dieser REDAXO-Version die Möglichkeit, die Metadaten in einen Tab zu verschieben.
+Die Artikel-Metadaten können im AddOn in einem eigenen Tab angezeigt werden.
+Der Speichern-Workflow bleibt dabei im Metadaten-Tab, und die Metadaten lassen sich direkt dort pflegen.
 
 ### Credits
 

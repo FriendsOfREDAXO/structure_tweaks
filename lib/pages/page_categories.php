@@ -1,11 +1,23 @@
 <?php
 
+namespace FriendsOfREDAXO\StructureTweaks;
+
+use rex;
+use rex_article;
+use rex_category_select;
+use rex_form;
+use rex_fragment;
+use rex_list;
+use rex_request;
+use rex_view;
+use rex_sql;
+
 class structure_tweaks_page_categories extends structure_tweaks_base
 {
     /**
      * @return string
      */
-    public static function getPage()
+    public static function getPage(): string
     {
         $return = '';
 
@@ -29,17 +41,18 @@ class structure_tweaks_page_categories extends structure_tweaks_base
     /**
      * @return string
      */
-    protected static function delete()
+    protected static function delete(): string
     {
         $sql = rex_sql::factory();
         #$sql->setDebug(true);
         $sql->setTable(rex::getTable(self::name()));
         $sql->setWhere('id='.self::getArticleId().' LIMIT 1');
 
+        /** @phpstan-ignore-next-line delete() returns a rex_sql control object in REDAXO */
         if ($sql->delete()) {
             $message = rex_view::info(self::msg('deleted'));
         } else {
-            $message = rex_view::warning($sql->getError());
+            $message = rex_view::warning((string) $sql->getError());
         }
 
         return $message;
@@ -48,7 +61,7 @@ class structure_tweaks_page_categories extends structure_tweaks_base
     /**
      * @return string
      */
-    protected static function getTable()
+    protected static function getTable(): string
     {
         $list = rex_list::factory('SELECT * FROM '.rex::getTable(self::name()).' ORDER BY id');
 
@@ -95,7 +108,7 @@ class structure_tweaks_page_categories extends structure_tweaks_base
     /**
      * @return string
      */
-    protected static function getForm()
+    protected static function getForm(): string
     {
         $article_id = self::getArticleId();
 
@@ -104,14 +117,19 @@ class structure_tweaks_page_categories extends structure_tweaks_base
         if (self::getFunc() == 'edit') {
             $form->addParam('article_id', $article_id);
         }
-        $form->addErrorMessage(REX_FORM_ERROR_VIOLATE_UNIQUE_KEY, self::msg('article_exists'));
+        $form->addErrorMessage(\REX_FORM_ERROR_VIOLATE_UNIQUE_KEY, self::msg('article_exists'));
 
-        $field = $form->addLinkmapField('article_id');
+        $field = $form->addSelectField('article_id');
         $field->setLabel(self::msg('article_linkmap'));
+        $field->setAttribute('class', 'form-control selectpicker show-menu-arrow');
+        $field->setAttribute('data-live-search', 'true');
+        $field->setAttribute('data-size', '15');
+        $categorySelect = new rex_category_select(false, false, true, true);
+        $field->setSelect($categorySelect);
 
         $field = $form->addSelectField('type');
         $field->setLabel(self::msg('type'));
-        $field->setAttribute('class', 'form-control selectpicker');
+        $field->setAttribute('class', 'form-control');
         $select = $field->getSelect();
         $select->setSize(1);
         $select->addOption('---', '');
@@ -128,22 +146,13 @@ class structure_tweaks_page_categories extends structure_tweaks_base
         $field = $form->addTextField('label');
         $field->setLabel(self::msg('splitter_label'));
 
-        $form->addRawField('
-            <script>
-                $(function() { 
-                    var structureTweaks_pageCategories = new structureTweaks();
-                    structureTweaks_pageCategories.pageCategories();
-                });
-            </script>
-        ');
-
         return $form->get();
     }
 
     /**
      * @return string
      */
-    protected static function getFunc()
+    protected static function getFunc(): string
     {
         return \rex_request::request('func', 'string');
     }
@@ -151,42 +160,36 @@ class structure_tweaks_page_categories extends structure_tweaks_base
     /**
      * @return int
      */
-    protected static function getArticleId()
+    protected static function getArticleId(): int
     {
         return \rex_request::request('article_id', 'int');
     }
 
     /**
-     * EP CALLBACK
-     * @param array $p
-     * @return string
+     * @param array{list: rex_list} $p
      */
-    public static function getArticleName($p)
+    public static function getArticleName(array $p): string
     {
         /** @var rex_list $list */
         $list = $p["list"];
 
-        $article = rex_article::get($list->getValue("article_id"));
+        $article = rex_article::get((int) $list->getValue('article_id'));
 
-        if ($article instanceof rex_article) {
-            $return = $article->getName();
-        } else {
-            $return = self::msg('article_not_found');
+        if (!$article instanceof rex_article) {
+            return self::msg('article_not_found');
         }
 
-        return $return;
+        return $article->getName();
     }
 
     /**
-     * EP CALLBACK
-     * @param array $p
-     * @return string
+     * @param array{list: rex_list} $p
      */
-    public static function getType($p)
+    public static function getType(array $p): string
     {
         /** @var rex_list $list */
         $list = $p["list"];
-        $type = $list->getValue("type");
+        $type = (string) $list->getValue('type');
 
         $text = [
             '' => '---',
@@ -201,6 +204,6 @@ class structure_tweaks_page_categories extends structure_tweaks_base
             'split_category' => self::msg('split_category'),
         ];
 
-        return $text[$type];
+        return $text[$type] ?? '---';
     }
 }

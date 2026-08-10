@@ -3,6 +3,12 @@
  * @var rex_addon $this
  */
 
+use FriendsOfREDAXO\StructureTweaks\structure_tweaks_category_splitter;
+use FriendsOfREDAXO\StructureTweaks\structure_tweaks_hide_categories;
+use FriendsOfREDAXO\StructureTweaks\structure_tweaks_hide_category_functions;
+use FriendsOfREDAXO\StructureTweaks\structure_tweaks_hide_startarticle;
+use FriendsOfREDAXO\StructureTweaks\structure_tweaks_move_metainfo_to_tab;
+
 if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
     if (rex_addon::get('metainfo')->isAvailable() || rex_addon::get('structure')->isAvailable()) {
         rex_view::addCssFile($this->getAssetsUrl('style.css'));
@@ -27,13 +33,7 @@ if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
     $this->setProperty('page', $page);
 
     // Move meta infos
-    if (rex_string::versionCompare(rex::getVersion(), '5.10.0-dev', '<')) {
-        if ($this->getConfig('move_meta_info_page')) {
-            structure_tweaks_move_metainfo::init();
-        }
-    } else {
-        if ($this->getConfig('move_meta_info_to_tab')) {
-            structure_tweaks_move_metainfo_to_tab::init();
-        }
+    if ($this->getConfig('move_meta_info_to_tab', $this->getConfig('move_meta_info_page'))) {
+        structure_tweaks_move_metainfo_to_tab::init();
     }
 }

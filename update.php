@@ -3,6 +3,17 @@
  * @author Friends of REDAXO
  */
 
+// Update wird in einer temporären Update-Umgebung ausgeführt, deshalb immer __DIR__ nutzen.
+rex_autoload::addDirectory(__DIR__ . '/lib');
+
+foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__ . '/lib', FilesystemIterator::SKIP_DOTS)) as $file) {
+    if (!$file->isFile() || $file->getExtension() !== 'php') {
+        continue;
+    }
+
+    require_once $file->getPathname();
+}
+
 $tables = rex_sql::showTables();
 if (in_array(rex::getTable('structure_tweaks'), $tables)) {
 
