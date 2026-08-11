@@ -354,3 +354,9 @@ var structureTweaks = function() {
         return this;
     };
 };
+
+$(document).on('rex:ready', function() {
+    if ($('#rex-structure-tweaks-startartikel-type').length) {
+        new structureTweaks().pageCategories();
+    }
+});

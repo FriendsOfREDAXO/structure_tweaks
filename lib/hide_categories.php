@@ -142,16 +142,25 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
      */
     private static function removeCategoryOptions(string $subject, string $select_id, array $hidden_categories): string
     {
-        /** @phpstan-ignore-next-line PHP 8.4 DOM API is available at runtime */
-        $document = HTMLDocument::createFromString($subject);
+        try {
+            /** @phpstan-ignore-next-line PHP 8.4 DOM API is available at runtime */
+            $document = HTMLDocument::createFromString($subject);
+        } catch (\Throwable $exception) {
+            return $subject;
+        }
 
         $element = $document->getElementById($select_id);
         if ($element) {
+            $optionsToRemove = [];
             foreach ($element->getElementsByTagName('option') as $option) {
                 /** @phpstan-ignore-next-line PHP 8.4 DOM API is available at runtime */
                 if (in_array((int) $option->getAttribute('value'), $hidden_categories, true)) {
-                    $element->removeChild($option);
+                    $optionsToRemove[] = $option;
                 }
+            }
+
+            foreach ($optionsToRemove as $option) {
+                $element->removeChild($option);
             }
         }
 
