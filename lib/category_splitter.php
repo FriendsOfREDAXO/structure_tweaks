@@ -59,11 +59,16 @@ class structure_tweaks_category_splitter extends structure_tweaks_base
         // Pass splitting categories to JavaScript
         $split_categories = self::getSplitterCategories();
         if ($split_categories !== []) {
+            $splitCategoriesJson = json_encode($split_categories, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+            if (!is_string($splitCategoriesJson)) {
+                $splitCategoriesJson = '[]';
+            }
+
             $subject .= '
                 <script nonce="' . rex_response::getNonce() . '">
                     $(document).on("rex:ready", function() {
                         const structureTweaksSplitCategories = new structureTweaks();
-                        structureTweaksSplitCategories.setSplitterCategories(\'' . json_encode($split_categories) . '\').splitCategories();
+                        structureTweaksSplitCategories.setSplitterCategories(\'' . $splitCategoriesJson . '\').splitCategories();
                     });
                 </script>
             ';

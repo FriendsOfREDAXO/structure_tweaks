@@ -73,11 +73,16 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
      */
     protected static function getScript(array $hidden_articles): string
     {
+        $hiddenArticlesJson = json_encode($hidden_articles, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+        if (!is_string($hiddenArticlesJson)) {
+            $hiddenArticlesJson = '[]';
+        }
+
         return '
             <script nonce="' . rex_response::getNonce() . '">
                 $(document).on("rex:ready", function() {
                     const structureTweaksHideArticles = new structureTweaks();
-                    structureTweaksHideArticles.setHiddenArticles(\'' . json_encode($hidden_articles) . '\').hideArticles();
+                    structureTweaksHideArticles.setHiddenArticles(\'' . $hiddenArticlesJson . '\').hideArticles();
                 });
             </script>
         ';

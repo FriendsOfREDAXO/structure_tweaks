@@ -4,7 +4,6 @@
  */
 
 use FriendsOfREDAXO\StructureTweaks\structure_tweaks_category_splitter;
-use FriendsOfREDAXO\StructureTweaks\structure_tweaks_hide_categories;
 use FriendsOfREDAXO\StructureTweaks\structure_tweaks_hide_category_functions;
 use FriendsOfREDAXO\StructureTweaks\structure_tweaks_hide_startarticle;
 use FriendsOfREDAXO\StructureTweaks\structure_tweaks_move_metainfo_to_tab;
@@ -22,7 +21,11 @@ if (rex::isBackend() && rex::getUser() && !rex::isSetup()) {
     structure_tweaks_hide_category_functions::init();
 
     // Hide categories
-    structure_tweaks_hide_categories::init();
+    if (class_exists('FriendsOfREDAXO\\StructureTweaks\\structure_tweaks_hide_categories')) {
+        \FriendsOfREDAXO\StructureTweaks\structure_tweaks_hide_categories::init();
+    } elseif (class_exists('structure_tweaks_hide_categories')) {
+        \structure_tweaks_hide_categories::init();
+    }
 
     // Split categories
     structure_tweaks_category_splitter::init();

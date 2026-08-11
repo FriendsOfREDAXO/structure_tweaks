@@ -100,11 +100,16 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
      */
     protected static function getScript(array $hidden_categories): string
     {
+        $hiddenCategoriesJson = json_encode($hidden_categories, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+        if (!is_string($hiddenCategoriesJson)) {
+            $hiddenCategoriesJson = '[]';
+        }
+
         return '
             <script nonce="' . rex_response::getNonce() . '">
                 $(document).on("rex:ready", function() {
                     const structureTweaksHideCategories = new structureTweaks();
-                    structureTweaksHideCategories.setHiddenCategories(\'' . json_encode($hidden_categories) . '\').hideCategoryFunctions(false);
+                    structureTweaksHideCategories.setHiddenCategories(\'' . $hiddenCategoriesJson . '\').hideCategoryFunctions(false);
                 });
             </script>
         ';
@@ -115,11 +120,16 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
      */
     protected static function getScriptAll(array $hidden_categories): string
     {
+        $hiddenCategoriesJson = json_encode($hidden_categories, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+        if (!is_string($hiddenCategoriesJson)) {
+            $hiddenCategoriesJson = '[]';
+        }
+
         return '
             <script nonce="' . rex_response::getNonce() . '">
                 $(document).on("rex:ready", function() {
                    const structureTweaksHideCategoriesAll = new structureTweaks();
-                    structureTweaksHideCategoriesAll.setHiddenCategories(\'' . json_encode($hidden_categories) . '\').hideCategoryFunctionsAll(false);
+                    structureTweaksHideCategoriesAll.setHiddenCategories(\'' . $hiddenCategoriesJson . '\').hideCategoryFunctionsAll(false);
                 });
             </script>
         ';

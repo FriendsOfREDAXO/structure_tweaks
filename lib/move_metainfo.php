@@ -126,9 +126,15 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
         if ($article->getRows() == 1) {
             // ----- ctype holen
             $template_attributes = $article->getArrayValue('template_attributes');
+            if (!is_array($template_attributes)) {
+                $template_attributes = [];
+            }
 
             // Für Artikel ohne Template
             $ctypes = $template_attributes['ctype'] ?? []; // ctypes - aus dem template
+            if (!is_array($ctypes)) {
+                $ctypes = [];
+            }
 
             $ctype = rex_request('ctype', 'int', 1);
             if (!array_key_exists($ctype, $ctypes)) {

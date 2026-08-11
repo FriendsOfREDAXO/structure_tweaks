@@ -10,7 +10,7 @@ page:
     icon: rex-icon rex-icon-package
     subpages:
         categories: { title: 'translate:page_categories' }
-        help: { title: 'translate:help', subPath: README.md, itemClass: 'pull-right' }
+        help: { title: 'translate:help', subPath: README.md, itemclass: 'pull-right' }
 
 requires:
     php: '>=8.4'

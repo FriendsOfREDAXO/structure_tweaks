@@ -55,3 +55,7 @@ class structure_tweaks_base
         return $return;
     }
 }
+
+if (!\class_exists('structure_tweaks_base', false)) {
+    \class_alias(__NAMESPACE__ . '\\structure_tweaks_base', 'structure_tweaks_base');
+}
