@@ -3,12 +3,24 @@
  * @author Friends of REDAXO
  */
 
+namespace FriendsOfREDAXO\StructureTweaks;
+
+use Dom\HTMLDocument;
+use rex;
+use rex_addon;
+use rex_extension;
+use rex_extension_point;
+use rex_plugin;
+use rex_request;
+use rex_response;
+use rex_sql;
+
 class structure_tweaks_hide_categories extends structure_tweaks_base
 {
     /**
      * Check page and category, hide if necessary
      */
-    public static function init()
+    public static function init(): void
     {
         rex_extension::register('PACKAGES_INCLUDED', function () {
             if (rex_addon::get('structure')->isAvailable() &&
@@ -24,10 +36,9 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
     }
 
     /**
-     * @param bool $non_admin
-     * @return array
+     * @return array<int, int>
      */
-    protected static function getHiddenCategories($non_admin = false)
+    protected static function getHiddenCategories(bool $non_admin = false): array
     {
         if ($non_admin) {
             $type = 'hide_categories_non_admin';
@@ -39,17 +50,15 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
     }
 
     /**
-     * EP CALLBACK
-     * @param rex_extension_point $ep
-     * @return string
+     * @param rex_extension_point<mixed> $ep
      */
-    public static function ep(rex_extension_point $ep)
+    public static function ep(rex_extension_point $ep): string
     {
         $subject = $ep->getSubject();
 
         // Pass hidden categories to JavaScript
         $hidden_categories = self::getHiddenCategories();
-        if (!empty($hidden_categories)) {
+        if ($hidden_categories !== []) {
             if (rex_request('page', 'string') == 'structure') {
                 $subject .= self::getScript($hidden_categories);
             }
@@ -60,7 +69,8 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
 
         // Pass hidden non-admin categories to JavaScript
         $hidden_categories = self::getHiddenCategories(true);
-        if (!empty($hidden_categories) && !rex::getUser()->isAdmin()) {
+        $user = rex::requireUser();
+        if ($hidden_categories !== [] && !$user->isAdmin()) {
             if (rex_request('page', 'string') == 'structure') {
                 $subject .= self::getScript($hidden_categories);
             }
@@ -73,24 +83,23 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
     }
 
     /**
-     * EP CALLBACK
-     * @param rex_extension_point $ep
-     * @return string
+     * @param rex_extension_point<mixed> $ep
      */
-    public static function epFunctions(rex_extension_point $ep)
+    public static function epFunctions(rex_extension_point $ep): string
     {
         $subject = $ep->getSubject();
 
         // Hidden categories
         $hidden_categories = self::getHiddenCategories();
-        if (!empty($hidden_categories)) {
+        if ($hidden_categories !== []) {
             $subject = self::removeCategoryOptions($subject, 'category_id_new', $hidden_categories);
             $subject = self::removeCategoryOptions($subject, 'category_copy_id_new', $hidden_categories);
         }
 
         // Hidden non-admin categories
         $hidden_categories = self::getHiddenCategories(true);
-        if (!empty($hidden_categories) && !rex::getUser()->isAdmin()) {
+        $user = rex::requireUser();
+        if ($hidden_categories !== [] && !$user->isAdmin()) {
             $subject = self::removeCategoryOptions($subject, 'category_id_new', $hidden_categories);
             $subject = self::removeCategoryOptions($subject, 'category_copy_id_new', $hidden_categories);
         }
@@ -99,58 +108,53 @@ class structure_tweaks_hide_categories extends structure_tweaks_base
     }
 
     /**
-     * @param array $hidden_categories
-     * @return string
+     * @param array<int, int> $hidden_categories
      */
-    protected static function getScript($hidden_categories)
+    protected static function getScript(array $hidden_categories): string
     {
         return '
-            <script>
+            <script nonce="' . rex_response::getNonce() . '">
                 $(document).on("rex:ready", function() {
-                    let structureTweaks_hideCategoryRows = new structureTweaks();
-                    structureTweaks_hideCategoryRows.setHiddenCategoryRows(\''.json_encode($hidden_categories).'\').hideCategories();
-                    structureTweaks_hideCategoryRows.hideCategories();
+                    const structureTweaksHideCategoryRows = new structureTweaks();
+                    structureTweaksHideCategoryRows.setHiddenCategoryRows(\'' . json_encode($hidden_categories) . '\').hideCategories();
                 });
             </script>
         ';
     }
 
     /**
-     * @param array $hidden_categories
-     * @return string
+     * @param array<int, int> $hidden_categories
      */
-    protected static function getScriptInLinkmap($hidden_categories)
+    protected static function getScriptInLinkmap(array $hidden_categories): string
     {
         return '
-            <script>
+            <script nonce="' . rex_response::getNonce() . '">
                 $(document).on("rex:ready", function() {
-                    let structureTweaks_hideCategoryRows = new structureTweaks();
-                    structureTweaks_hideCategoryRows.setHiddenCategoryRows(\''.json_encode($hidden_categories).'\').hideCategories();
-                    structureTweaks_hideCategoryRows.hideCategoriesInLinkmap();
+                    const structureTweaksHideCategoryRows = new structureTweaks();
+                    structureTweaksHideCategoryRows.setHiddenCategoryRows(\'' . json_encode($hidden_categories) . '\').hideCategoriesInLinkmap();
                 });
             </script>
         ';
     }
 
+    /**
+     * @param array<int, int> $hidden_categories
+     */
     private static function removeCategoryOptions(string $subject, string $select_id, array $hidden_categories): string
     {
-        libxml_use_internal_errors(true); // Disable HTML parsing warnings @see https://stackoverflow.com/questions/9149180/domdocumentloadhtml-error
+        /** @phpstan-ignore-next-line PHP 8.4 DOM API is available at runtime */
+        $document = HTMLDocument::createFromString($subject);
 
-        $dom = new DOMDocument('1.0', 'utf-8');
-        $dom->loadHTML($subject);
-
-        $element = $dom->getElementById($select_id);
+        $element = $document->getElementById($select_id);
         if ($element) {
-            /** @var DOMElement $option */
             foreach ($element->getElementsByTagName('option') as $option) {
-                if (in_array($option->getAttribute('value'), $hidden_categories)) {
+                /** @phpstan-ignore-next-line PHP 8.4 DOM API is available at runtime */
+                if (in_array((int) $option->getAttribute('value'), $hidden_categories, true)) {
                     $element->removeChild($option);
                 }
             }
         }
 
-        libxml_use_internal_errors(false); // Enable HTML parsing warnings
-
-        return $dom->saveHTML();
+        return $document->saveHtml();
     }
 }
