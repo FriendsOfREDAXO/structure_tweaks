@@ -3,12 +3,35 @@
  * @author Friends of REDAXO
  */
 
+namespace FriendsOfREDAXO\StructureTweaks;
+
+use rex;
+use rex_addon;
+use rex_article;
+use rex_article_service;
+use rex_api_article_status;
+use rex_api_category_status;
+use rex_be_controller;
+use rex_clang;
+use rex_context;
+use rex_extension;
+use rex_extension_point;
+use rex_formatter;
+use rex_fragment;
+use rex_i18n;
+use rex_metainfo_article_handler;
+use rex_plugin;
+use rex_request;
+use rex_url;
+use rex_sql;
+use rex_view;
+
 class structure_tweaks_move_metainfo extends structure_tweaks_base
 {
     /**
      * Move meta page
      */
-    public static function init()
+    public static function init(): void
     {
         if (rex_addon::get('metainfo')->isAvailable()) {
             // Remove meta info tab
@@ -25,11 +48,9 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
     }
 
     /**
-     * EP CALLBACK
-     * @param rex_extension_point $ep
-     * @return string
+     * @param rex_extension_point<mixed> $ep
      */
-    public static function getMetaPage(rex_extension_point $ep)
+    public static function getMetaPage(rex_extension_point $ep): string
     {
         $params = $ep->getParams();
         $subject = $ep->getSubject();
@@ -39,9 +60,9 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
         $fragment = new rex_fragment();
         $fragment->setVar('title', '<i class="rex-icon rex-icon-info"></i> '.self::msg('metadata'), false);
         $fragment->setVar('body', $panel, false);
-        $fragment->setVar('article_id', $params['article_id'], false);
-        $fragment->setVar('clang', $params['clang'], false);
-        $fragment->setVar('ctype', $params['ctype'], false);
+        $fragment->setVar('article_id', (int) $params['article_id'], false);
+        $fragment->setVar('clang', (int) $params['clang'], false);
+        $fragment->setVar('ctype', (int) $params['ctype'], false);
         $fragment->setVar('collapse', true);
         $fragment->setVar('collapsed', false);
         $content = $fragment->parse('core/page/section.php');
@@ -54,11 +75,14 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
      * @see redaxo/src/addons/structure/plugins/content/boot.php
      * @return string
      */
-    protected static function getStructure()
+    protected static function getStructure(): string
     {
         $article_id = self::getArticleId();
         $clang_id = self::getClangId();
         $article = rex_article::get($article_id, $clang_id);
+        if (!$article instanceof rex_article) {
+            return '';
+        }
         $article_status = self::getArticleStatus($article_id, $clang_id);
 
         return '
@@ -75,7 +99,7 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
     /**
      * @return string
      */
-    protected static function getMetaInfo()
+    protected static function getMetaInfo(): string
     {
         $return = '';
 
@@ -94,8 +118,9 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
             LEFT JOIN '.rex::getTablePrefix()."template as template
                 ON template.id=article.template_id
             WHERE
-                article.id='$article_id'
-                AND clang_id=$clang"
+                article.id=?
+                AND clang_id=?",
+            [$article_id, $clang]
         );
 
         if ($article->getRows() == 1) {
@@ -103,11 +128,7 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
             $template_attributes = $article->getArrayValue('template_attributes');
 
             // Für Artikel ohne Template
-            if (!is_array($template_attributes)) {
-                $template_attributes = [];
-            }
-
-            $ctypes = isset($template_attributes['ctype']) ? $template_attributes['ctype'] : []; // ctypes - aus dem template
+            $ctypes = $template_attributes['ctype'] ?? []; // ctypes - aus dem template
 
             $ctype = rex_request('ctype', 'int', 1);
             if (!array_key_exists($ctype, $ctypes)) {
@@ -131,10 +152,15 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
                 'article' => $article,
             ]);
 
+            $articleObject = rex_article::get($article_id, $clang);
+            if (!$articleObject instanceof rex_article) {
+                return '';
+            }
+
             $formElements = [];
             $formElements[] = [
                 'label' => '<label for="rex-id-meta-article-name">'.rex_i18n::msg('header_article_name').'</label>',
-                'field' => '<input class="form-control" type="text" id="rex-id-meta-article-name" name="meta_article_name" value="'.htmlspecialchars(rex_article::get($article_id, $clang)->getValue('name')).'" />',
+                'field' => '<input class="form-control" type="text" id="rex-id-meta-article-name" name="meta_article_name" value="'.htmlspecialchars((string) $articleObject->getValue('name')).'" />',
             ];
             $fragment = new rex_fragment();
             $fragment->setVar('elements', $formElements, false);
@@ -164,13 +190,17 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
      * @param int $clang_id
      * @return string
      */
-    protected static function getArticleStatus($article_id, $clang_id)
+    protected static function getArticleStatus(int $article_id, int $clang_id): string
     {
         $article = rex_article::get($article_id, $clang_id);
+        if (!$article instanceof rex_article) {
+            return '';
+        }
         $artstart = rex_request('artstart', 'int');
         $catstart = rex_request('catstart', 'int');
 
-        $perm = rex::getUser()->getComplexPerm('structure')->hasCategoryPerm($article_id);
+        $user = rex::requireUser();
+        $perm = $user->getComplexPerm('structure')->hasCategoryPerm($article_id);
 
         $context = new rex_context([
             'page' => 'content/edit',
@@ -179,10 +209,12 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
             'clang' => $clang_id,
         ]);
 
+        /** @var array<int, array{0: string, 1: string, 2: string}> $article_status_types */
         $article_status_types = rex_article_service::statusTypes();
-        $article_status = $article_status_types[$article->getValue('status')][0];
-        $article_class = $article_status_types[$article->getValue('status')][1];
-        $article_icon = $article_status_types[$article->getValue('status')][2];
+        $status = (int) $article->getValue('status');
+        $article_status = $article_status_types[$status][0] ?? '';
+        $article_class = $article_status_types[$status][1] ?? '';
+        $article_icon = $article_status_types[$status][2] ?? '';
 
         if (version_compare(rex::getVersion(), '5.5.0', '<')) {
             if ($article->isStartArticle()) {
@@ -210,7 +242,7 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
             }
         }
 
-        if ($perm && rex::getUser()->hasPerm('publishArticle[]')) {
+        if ($perm && $user->hasPerm('publishArticle[]')) {
             $return = '<a class="'.$article_class.'" href="'.$article_link.'"><i class="rex-icon '.$article_icon.'"></i> '.$article_status.'</a>';
         } else {
             $return = '<span class="'.$article_class.' text-muted"><i class="rex-icon '.$article_icon.'"></i> '.$article_status.'</span>';
@@ -222,7 +254,7 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
     /**
      * @return int
      */
-    protected static function getArticleId()
+    protected static function getArticleId(): int
     {
         $article_id = rex_request('article_id', 'int');
         $article_id = rex_article::get($article_id) ? $article_id : 0;
@@ -233,7 +265,7 @@ class structure_tweaks_move_metainfo extends structure_tweaks_base
     /**
      * @return int
      */
-    protected static function getClangId()
+    protected static function getClangId(): int
     {
         $clang_id = rex_request('clang', 'int');
         $clang_id = rex_clang::exists($clang_id) ? $clang_id : rex_clang::getStartId();

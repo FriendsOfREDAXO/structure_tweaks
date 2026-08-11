@@ -13,4 +13,4 @@ $table
 ;
 
 // Ensure that all updates are also executed on re-install
-include ('update.php');
+include __DIR__ . '/update.php';

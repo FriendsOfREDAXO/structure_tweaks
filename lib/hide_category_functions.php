@@ -3,12 +3,23 @@
  * @author Friends of REDAXO
  */
 
+namespace FriendsOfREDAXO\StructureTweaks;
+
+use rex;
+use rex_addon;
+use rex_extension;
+use rex_extension_point;
+use rex_plugin;
+use rex_request;
+use rex_response;
+use rex_sql;
+
 class structure_tweaks_hide_category_functions extends structure_tweaks_base
 {
     /**
      * Check page and category, hide if necessary
      */
-    public static function init()
+    public static function init(): void
     {
         rex_extension::register('PACKAGES_INCLUDED', function () {
             if (
@@ -21,10 +32,9 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
     }
 
     /**
-     * @param bool $non_admin
-     * @return array
+     * @return array<int, int>
      */
-    protected static function getHiddenCategories($non_admin = false)
+    protected static function getHiddenCategories(bool $non_admin = false): array
     {
         if ($non_admin) {
             $type = 'hide_cat_functions_non_admin';
@@ -36,10 +46,9 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
     }
 
     /**
-     * @param bool $non_admin
-     * @return array
+     * @return array<int, int>
      */
-    protected static function getHiddenCategoriesAll($non_admin = false)
+    protected static function getHiddenCategoriesAll(bool $non_admin = false): array
     {
         if ($non_admin) {
             $type = 'hide_cat_functions_all_non_admin';
@@ -51,35 +60,35 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
     }
 
     /**
-     * EP CALLBACK
-     * @param rex_extension_point $ep
-     * @return string
+     * @param rex_extension_point<mixed> $ep
      */
-    public static function ep(rex_extension_point $ep)
+    public static function ep(rex_extension_point $ep): string
     {
         $subject = $ep->getSubject();
 
         // Pass hidden categories to JavaScript
         $hidden_categories = self::getHiddenCategories();
-        if (!empty($hidden_categories)) {
+        if ($hidden_categories !== []) {
             $subject .= self::getScript($hidden_categories);
         }
 
         // Pass hidden non-admin categories to JavaScript
         $hidden_categories = self::getHiddenCategories(true);
-        if (!empty($hidden_categories) && !rex::getUser()->isAdmin()) {
+        $user = rex::requireUser();
+        if ($hidden_categories !== [] && !$user->isAdmin()) {
             $subject .= self::getScript($hidden_categories);
         }
 
         // Pass hidden categories to JavaScript
         $hidden_categories = self::getHiddenCategoriesAll();
-        if (!empty($hidden_categories)) {
+        if ($hidden_categories !== []) {
             $subject .= self::getScriptAll($hidden_categories);
         }
 
         // Pass hidden non-admin categories to JavaScript
         $hidden_categories = self::getHiddenCategoriesAll(true);
-        if (!empty($hidden_categories) && !rex::getUser()->isAdmin()) {
+        $user = rex::requireUser();
+        if ($hidden_categories !== [] && !$user->isAdmin()) {
             $subject .= self::getScriptAll($hidden_categories);
         }
 
@@ -87,44 +96,30 @@ class structure_tweaks_hide_category_functions extends structure_tweaks_base
     }
 
     /**
-     * @param array $hidden_categories
-     * @return string
+     * @param array<int, int> $hidden_categories
      */
-    protected static function getScript($hidden_categories)
+    protected static function getScript(array $hidden_categories): string
     {
-        $deprecated_traversing = 'false';
-        if (version_compare(rex::getVersion(), '5.5.0', '<')) {
-            $deprecated_traversing = 'true';
-        }
-
         return '
-            <script>
+            <script nonce="' . rex_response::getNonce() . '">
                 $(document).on("rex:ready", function() {
-                    let structureTweaks_hideCategories = new structureTweaks();
-                    structureTweaks_hideCategories.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctions('.$deprecated_traversing.');
-                    structureTweaks_hideCategories.hideCategoryFunctions();
+                    const structureTweaksHideCategories = new structureTweaks();
+                    structureTweaksHideCategories.setHiddenCategories(\'' . json_encode($hidden_categories) . '\').hideCategoryFunctions(false);
                 });
             </script>
         ';
     }
 
     /**
-     * @param array $hidden_categories
-     * @return string
+     * @param array<int, int> $hidden_categories
      */
-    protected static function getScriptAll($hidden_categories)
+    protected static function getScriptAll(array $hidden_categories): string
     {
-        $deprecated_traversing = 'false';
-        if (version_compare(rex::getVersion(), '5.5.0', '<')) {
-            $deprecated_traversing = 'true';
-        }
-
         return '
-            <script>
+            <script nonce="' . rex_response::getNonce() . '">
                 $(document).on("rex:ready", function() {
-                   let structureTweaks_hideCategoriesAll = new structureTweaks();
-                    structureTweaks_hideCategoriesAll.setHiddenCategories(\''.json_encode($hidden_categories).'\').hideCategoryFunctionsAll('.$deprecated_traversing.');
-                    structureTweaks_hideCategoriesAll.hideCategoryFunctions();
+                   const structureTweaksHideCategoriesAll = new structureTweaks();
+                    structureTweaksHideCategoriesAll.setHiddenCategories(\'' . json_encode($hidden_categories) . '\').hideCategoryFunctionsAll(false);
                 });
             </script>
         ';
