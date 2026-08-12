@@ -22,16 +22,20 @@ $context = new rex_context([
     'ctype' => $ctype,
 ]);
 
+$csrfToken = rex_metainfo_handler::getCsrfToken();
+
 $content = '';
 
 if (rex_post('savemeta', 'boolean')) {
-    $content = rex_view::success(rex_i18n::msg('minfo_metadata_saved'));
+    $content = $csrfToken->isValid()
+        ? rex_view::success(rex_i18n::msg('minfo_metadata_saved'))
+        : rex_view::error(rex_i18n::msg('csrf_token_invalid'));
 }
 
 $panel = '<fieldset>
             <input type="hidden" name="save" value="1" />
             <input type="hidden" name="ctype" value="' . $ctype . '" />
-            ';
+            ' . $csrfToken->getHiddenField();
 
 $metainfoHandler = new rex_metainfo_article_handler();
 $form = $metainfoHandler->getForm([
