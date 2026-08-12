@@ -46,7 +46,12 @@ $form = $metainfoHandler->getForm([
 
 $n = [];
 $n['label'] = '<label for="rex-id-meta-article-name">' . rex_i18n::msg('header_article_name') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="rex-id-meta-article-name" name="meta_article_name" value="' . rex_escape(rex_article::get($articleId, $clang)->getValue('name')) . '" />';
+$articleObject = rex_article::get($articleId, $clang);
+if (!$articleObject instanceof rex_article) {
+    return '';
+}
+
+$n['field'] = '<input class="form-control" type="text" id="rex-id-meta-article-name" name="meta_article_name" value="' . rex_escape((string) $articleObject->getValue('name')) . '" />';
 $formElements = [$n];
 
 $fragment = new rex_fragment();
@@ -73,6 +78,8 @@ $fragment->setVar('buttons', $buttons, false);
 $content .= $fragment->parse('core/page/section.php');
 
 return '
-    <form action="' . $context->getUrl() . '" method="post" enctype="multipart/form-data">
-        ' . $content . '
-    </form>';
+    <div id="rex-page-sidebar-metainfo" data-pjax-container="#rex-page-sidebar-metainfo">
+        <form class="moved-metainfo metainfo-sidebar" action="' . $context->getUrl() . '" method="post" enctype="multipart/form-data">
+            ' . $content . '
+        </form>
+    </div>';
