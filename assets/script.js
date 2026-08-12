@@ -332,6 +332,22 @@ var structureTweaks = function() {
      * @returns {structureTweaks}
      */
     this.pageCategories = function() {
+        var $categorySelect = jQuery('#rex-structure-tweaks-startartikel-article-id');
+        if ($categorySelect.length) {
+            $categorySelect
+                .addClass('selectpicker show-menu-arrow')
+                .attr('data-live-search', 'true')
+                .attr('data-size', '15');
+
+            if (jQuery.fn.selectpicker) {
+                if ($categorySelect.parent().hasClass('bootstrap-select')) {
+                    $categorySelect.selectpicker('refresh');
+                } else {
+                    $categorySelect.selectpicker();
+                }
+            }
+        }
+
         var value = jQuery('#rex-structure-tweaks-startartikel-type option:selected').val();
         if (value === undefined) {
             value = "";
