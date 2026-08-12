@@ -3,28 +3,38 @@
  * @author Rexdude, Friends of REDAXO
  */
 
+namespace FriendsOfREDAXO\StructureTweaks;
+
+use rex;
+use rex_addon;
+use rex_extension;
+use rex_extension_point;
+use rex_i18n;
+use rex_request;
+use rex_response;
+use rex_sql;
+
 class structure_tweaks_hide_startarticle extends structure_tweaks_base
 {
     /**
      * Check page and category, hide if necessary
      */
-    public static function init()
+    public static function init(): void
     {
         rex_extension::register('PACKAGES_INCLUDED', function () {
             $pages = ['structure', 'linkmap']; // Pages, where articles are shown
-            $page =  rex_request::request('page', 'string');
+            $page = rex_request::request('page', 'string');
 
-            if (rex_addon::get('structure')->isAvailable() && in_array($page, $pages)) {
+            if (rex_addon::get('structure')->isAvailable() && in_array($page, $pages, true)) {
                 rex_extension::register('PAGE_HEADER', [__CLASS__, 'ep']);
             }
         });
     }
 
     /**
-     * @param bool $non_admin
-     * @return array
+     * @return array<int, int>
      */
-    protected static function getHiddenArticles($non_admin = false)
+    protected static function getHiddenArticles(bool $non_admin = false): array
     {
         if ($non_admin) {
             $type = 'hide_startarticle_non_admin';
@@ -36,23 +46,22 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
     }
 
     /**
-     * EP CALLBACK
-     * @param rex_extension_point $ep
-     * @return string
+     * @param rex_extension_point<mixed> $ep
      */
-    public static function ep(rex_extension_point $ep)
+    public static function ep(rex_extension_point $ep): string
     {
         $subject = $ep->getSubject();
 
         // Pass hidden articles to JavaScript
         $hidden_articles = self::getHiddenArticles();
-            if (!empty($hidden_articles)) {
-                $subject .= self::getScript($hidden_articles);
+        if ($hidden_articles !== []) {
+            $subject .= self::getScript($hidden_articles);
         }
 
         // Pass hidden non-admin articles to JavaScript
         $hidden_articles = self::getHiddenArticles(true);
-        if (!empty($hidden_articles) && !rex::getUser()->isAdmin()) {
+        $user = rex::requireUser();
+        if ($hidden_articles !== [] && !$user->isAdmin()) {
             $subject .= self::getScript($hidden_articles);
         }
 
@@ -60,17 +69,20 @@ class structure_tweaks_hide_startarticle extends structure_tweaks_base
     }
 
     /**
-     * @param array $hidden_articles
-     * @return string
+     * @param array<int, int> $hidden_articles
      */
-    protected static function getScript($hidden_articles)
+    protected static function getScript(array $hidden_articles): string
     {
+        $hiddenArticlesJson = json_encode($hidden_articles, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+        if (!is_string($hiddenArticlesJson)) {
+            $hiddenArticlesJson = '[]';
+        }
+
         return '
-            <script>
+            <script nonce="' . rex_response::getNonce() . '">
                 $(document).on("rex:ready", function() {
-                    let structureTweaks_hideArticles = new structureTweaks();
-                    structureTweaks_hideArticles.setHiddenArticles(\''.json_encode($hidden_articles).'\').hideArticles();
-                    structureTweaks_hideArticles.hideArticles();
+                    const structureTweaksHideArticles = new structureTweaks();
+                    structureTweaksHideArticles.setHiddenArticles(\'' . $hiddenArticlesJson . '\').hideArticles();
                 });
             </script>
         ';
